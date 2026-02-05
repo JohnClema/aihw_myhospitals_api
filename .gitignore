@@ -15,3 +15,22 @@ Cargo.lock
 .idea/
 .vscode/
 *.swp
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyd
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.mypy_cache/
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/

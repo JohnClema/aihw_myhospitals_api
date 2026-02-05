@@ -108,6 +108,13 @@ mod generated {
 #[warn(missing_docs)]
 pub use generated::*;
 
+// Python bindings (only compiled with the "python" feature)
+#[cfg(feature = "python")]
+mod python;
+
+#[cfg(feature = "python")]
+pub use python::*;
+
 /// Default base URL for the MyHospitals API.
 ///
 /// This is the production URL: `https://myhospitalsapi.aihw.gov.au`

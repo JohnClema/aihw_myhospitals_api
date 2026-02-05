@@ -10,6 +10,12 @@ build = "cargo build"
 test = "cargo test"
 example = "cargo run --example basic_usage"
 clean = "cargo clean"
+build-python = "maturin develop --features python"
+test-python = "pytest tests/test_python.py -v"
 
 [dependencies]
 rust = ">=1.92.0,<1.93"
+python = ">=3.10,<3.14"
+maturin = ">=1.0"
+pytest = ">=7.0"
+pytest-asyncio = ">=0.21"
