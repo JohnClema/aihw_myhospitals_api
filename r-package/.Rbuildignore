@@ -1,0 +1,14 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^src/rust/target$
+^src/\.cargo$
+^cran-comments\.md$
+^\.github$
+^LICENSE\.md$
+^README\.Rmd$
+^codecov\.yml$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.lintr$
+^tools$

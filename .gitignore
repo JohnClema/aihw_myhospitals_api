@@ -34,3 +34,11 @@ build/
 .venv/
 venv/
 env/
+
+# R package build artifacts
+*.Rcheck/
+aihwmyhospitals_*.tar.gz
+*.o
+r-package/src/rust/target/
+r-package/src/.cargo/
+r-package/src/*.so

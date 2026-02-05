@@ -1,0 +1,37 @@
+TARGET_DIR = ./rust/target
+LIBDIR = $(TARGET_DIR)/release
+STATLIB = $(LIBDIR)/libaihwmyhospitals.a
+PKG_LIBS = -L$(LIBDIR) -laihwmyhospitals -lws2_32 -ladvapi32 -luserenv -lbcrypt -lntdll
+
+all: C_clean
+
+$(SHLIB): $(STATLIB)
+
+CARGOTMP = $(CURDIR)/.cargo
+
+$(STATLIB):
+	mkdir -p $(TARGET_DIR)/libgcc_mock
+	touch $(TARGET_DIR)/libgcc_mock/libgcc_eh.a
+
+	# `rustc` adds `-lgcc_eh` flags to the compiler, but Rtools' GCC doesn't have
+	# `libgcc_eh` due to the compilation settings. So, in order to please the
+	# compiler, we need to add empty `libgcc_eh` to the library search paths.
+	#
+	# See: https://github.com/pola-rs/r-polars/pull/152
+	# See: https://github.com/pola-rs/r-polars/pull/1292
+	if [ "$(NOT_CRAN)" != "true" ]; then \
+		export CARGO_HOME=$(CARGOTMP); \
+	fi && \
+		export CARGO_TARGET_X86_64_PC_WINDOWS_GNU_LINKER="$(RTOOLS43_HOME)/x86_64-w64-mingw32.static.posix/bin/gcc.exe" && \
+		export LIBRARY_PATH="$${LIBRARY_PATH};$(CURDIR)/$(TARGET_DIR)/libgcc_mock" && \
+		cargo build --lib --release --manifest-path=./rust/Cargo.toml --target-dir=$(TARGET_DIR) -j 2
+	if [ "$(NOT_CRAN)" != "true" ]; then \
+		rm -Rf $(CARGOTMP) && \
+		rm -Rf $(LIBDIR)/build; \
+	fi
+
+C_clean:
+	rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS)
+
+clean:
+	rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS) $(TARGET_DIR)

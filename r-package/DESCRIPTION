@@ -1,0 +1,21 @@
+Package: aihwmyhospitals
+Title: Client for the AIHW MyHospitals Data API
+Version: 0.1.0
+Authors@R:
+    person("John", "Clema", , "john.clema@gmail.com", role = c("aut", "cre"))
+Description: An unofficial R client for the Australian Institute of Health
+    and Welfare (AIHW) MyHospitals Data API. Provides access to Australian
+    hospital performance data including measures, datasets, reporting units,
+    and data extracts. Built on Rust for speed and reliability.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+SystemRequirements: Cargo (Rust's package manager, >= 1.70), rustc (>= 1.70)
+Suggests:
+    testthat (>= 3.0.0),
+    tibble
+Config/testthat/edition: 3
+Config/rextendr/version: 0.4.2
+URL: https://github.com/JohnClema/aihw_myhospitals_api
+BugReports: https://github.com/JohnClema/aihw_myhospitals_api/issues

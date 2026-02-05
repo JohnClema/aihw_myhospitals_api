@@ -6,16 +6,36 @@ platforms = ["osx-arm64"]
 version = "0.1.0"
 
 [tasks]
+# Rust tasks
 build = "cargo build"
 test = "cargo test"
 example = "cargo run --example basic_usage"
 clean = "cargo clean"
+
+# Python tasks
 build-python = "maturin develop --features python"
 test-python = "pytest tests/test_python.py -v"
 
+# R tasks
+setup-r = { cmd = "Rscript -e \"install.packages('rextendr', repos='https://cloud.r-project.org')\"", description = "Install rextendr from CRAN (one-time setup)" }
+build-r = { cmd = "R CMD INSTALL --no-multiarch --with-keep.source r-package", description = "Build and install R package locally" }
+test-r = { cmd = "Rscript -e \"testthat::test_dir('r-package/tests/testthat')\"", description = "Run R tests" }
+check-r = { cmd = "R CMD build r-package && R CMD check --as-cran aihwmyhospitals_*.tar.gz", description = "Build and check R package for CRAN" }
+document-r = { cmd = "Rscript -e \"devtools::document('r-package')\"", description = "Generate R documentation" }
+vendor-r = { cmd = "Rscript -e \"rextendr::vendor_pkgs('r-package')\"", description = "Vendor Rust dependencies for CRAN" }
+prepare-cran = { cmd = "Rscript r-package/tools/prepare-cran.R", description = "Prepare R package for CRAN submission" }
+submit-cran = { cmd = "Rscript r-package/tools/submit-cran.R", description = "Submit R package to CRAN" }
+
 [dependencies]
-rust = ">=1.92.0,<1.93"
+rust = ">=1.82.0,<2"
 python = ">=3.10,<3.14"
 maturin = ">=1.0"
 pytest = ">=7.0"
 pytest-asyncio = ">=0.21"
+
+# R and R packages
+r-base = ">=4.3"
+r-devtools = ">=2.4"
+r-testthat = ">=3.0"
+r-roxygen2 = ">=7.0"
+r-jsonlite = ">=1.8"

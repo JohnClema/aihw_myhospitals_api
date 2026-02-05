@@ -1,0 +1,17 @@
+#!/bin/sh
+# Cleanup script for aihwmyhospitals R package
+# Removes Rust build artifacts after package installation
+
+cd src
+
+# Remove Rust target directory (compiled artifacts)
+if [ -d "rust/target" ]; then
+  rm -rf rust/target
+fi
+
+# Remove temporary cargo home directory (used during CRAN builds)
+if [ -d ".cargo" ]; then
+  rm -rf .cargo
+fi
+
+exit 0
