@@ -1,0 +1,17 @@
+# Rust build artifacts
+/target/
+
+# Cargo.lock (library - let downstream resolve dependencies)
+Cargo.lock
+
+# pixi environments
+.pixi/*
+!.pixi/config.toml
+
+# OS files
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.swp
