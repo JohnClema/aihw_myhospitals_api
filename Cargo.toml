@@ -1,0 +1,64 @@
+[package]
+name = "aihw_myhospitals_api"
+version = "0.1.0"
+edition = "2021"
+repository = "https://github.com/JohnClema/aihw_myhospitals_api"
+authors = ["John Clema <john.clema@gmail.com>"]
+rust-version = "1.75"
+description = "Rust client for the MyHospitals Data API (Australian Institute of Health and Welfare)"
+license = "MIT"
+keywords = ["api", "client", "healthcare", "australia", "openapi"]
+categories = ["api-bindings", "web-programming::http-client"]
+readme = "README.md"
+documentation = "https://docs.rs/aihw_myhospitals_api"
+
+[dependencies]
+futures = "0.3"
+progenitor-client = "0.11"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+chrono = { version = "0.4", features = ["serde"] }
+
+[build-dependencies]
+progenitor = "0.11"
+openapiv3 = "2"
+prettyplease = "0.2"
+serde_json = "1.0"
+syn = "2.0"
+
+[dev-dependencies]
+tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+
+[features]
+## Enable integration tests that require network access.
+## Run with: cargo test --features integration-tests
+integration-tests = []
+
+[[example]]
+name = "basic_usage"
+path = "examples/basic_usage.rs"
+
+[[example]]
+name = "caveats"
+path = "examples/caveats.rs"
+
+[[example]]
+name = "datasets"
+path = "examples/datasets.rs"
+
+[[example]]
+name = "measures"
+path = "examples/measures.rs"
+
+[[example]]
+name = "reporting_units"
+path = "examples/reporting_units.rs"
+
+[[example]]
+name = "data_extracts"
+path = "examples/data_extracts.rs"
+
+[[example]]
+name = "downloads"
+path = "examples/downloads.rs"

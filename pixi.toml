@@ -1,0 +1,15 @@
+[workspace]
+authors = ["John Clema <john.clema@gmail.com>"]
+channels = ["conda-forge"]
+name = "myhospitalsapi"
+platforms = ["osx-arm64"]
+version = "0.1.0"
+
+[tasks]
+build = "cargo build"
+test = "cargo test"
+example = "cargo run --example basic_usage"
+clean = "cargo clean"
+
+[dependencies]
+rust = ">=1.92.0,<1.93"

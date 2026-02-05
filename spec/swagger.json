@@ -1,0 +1,3706 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "MyHospitals Data API",
+    "description": "<p>This page provides details of the calls available within the MyHospitals Data API, followed by schema documentation of what the calls return.</p>",
+    "contact": {
+      "name": "AIHW Contact us",
+      "url": "https://www.aihw.gov.au/contact-us"
+    },
+    "license": {
+      "name": "Material that can be copied or downloaded from this website has been released under a Creative Commons BY 3.0 (CC-BY 3.0) licence",
+      "url": "https://www.aihw.gov.au/copyright"
+    },
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/v1/caveats": {
+      "get": {
+        "tags": [
+          "Caveats"
+        ],
+        "summary": "Gets a list of caveats.",
+        "description": "Gets list of all caveats.",
+        "parameters": [
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Caveats successfully retrieved. Empty list will be returned for no matches.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CaveatModel"
+                  }
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CaveatModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/caveats/{caveat-code}": {
+      "get": {
+        "tags": [
+          "Caveats"
+        ],
+        "summary": "Gets a caveat.",
+        "description": "Gets a caveat matching the supplied caveat code.",
+        "parameters": [
+          {
+            "name": "caveat-code",
+            "in": "path",
+            "description": "The caveat code.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reporting unit type was successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CaveatModel"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/CaveatModel"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No caveat was found matching the caveat code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/datasets": {
+      "get": {
+        "tags": [
+          "DataSets"
+        ],
+        "summary": "Gets a list of datasets.",
+        "description": "Gets a list of datasets, optionally filtered by a list of measure and reported measure codes. \\\r\n                Matching within each filter is by logical disjunction (OR) and matching across filters is by logical conjunction (AND).",
+        "parameters": [
+          {
+            "name": "measure_code",
+            "in": "query",
+            "description": "The measure codes.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "reported_measure_code",
+            "in": "query",
+            "description": "The reported measure codes.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Datasets successfully retrieved. Empty list will be returned for no matches.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DataSetModel"
+                  }
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DataSetModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/datasets/{dataset-id}": {
+      "get": {
+        "tags": [
+          "DataSets"
+        ],
+        "summary": "Gets a single dataset.",
+        "description": "Gets a single dataset matching the supplied dataset id.",
+        "parameters": [
+          {
+            "name": "dataset-id",
+            "in": "path",
+            "description": "The dataset id.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dataset was successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataSetModel"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataSetModel"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No dataset was found matching the dataset id.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dataset id was not a valid integer."
+          }
+        }
+      }
+    },
+    "/api/v1/datasets/{dataset-id}/data-items": {
+      "get": {
+        "tags": [
+          "DataSets"
+        ],
+        "summary": "Gets a list of data items for a dataset.",
+        "description": "Gets a list of data items for a dataset,, optionally filtered, using logical disjunction (OR), by a list of reporting unit codes.",
+        "parameters": [
+          {
+            "name": "dataset-id",
+            "in": "path",
+            "description": "The dataset id.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "reporting_unit_code",
+            "in": "query",
+            "description": "The reporting unit codes.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data items successfully retrieved for the dataset.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataItemModel"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataItemModel"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No dataset was found matching the dataset id.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dataset id was not a valid integer."
+          }
+        }
+      }
+    },
+    "/api/v1/measure-downloads/measure-download-codes": {
+      "get": {
+        "tags": [
+          "MeasureDownloads"
+        ],
+        "summary": "Gets a dictionary, indexed by the measure download code, of the measure downloads available.",
+        "description": "Gets dictionary, indexed by the measure download code, of all available measure download codes and descriptions that can be used in the measure download API call.",
+        "parameters": [
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Measure download codes successfully retrieved. Empty dictionary will be returned for no matches.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DatasheetConfigurationSummaryModel"
+                    }
+                  }
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DatasheetConfigurationSummaryModel"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/measure-downloads/{measure-download-code}": {
+      "get": {
+        "tags": [
+          "MeasureDownloads"
+        ],
+        "summary": "Gets a measure download.",
+        "description": "Gets a measure download, in XLSX format, for the supplied measure download code.",
+        "parameters": [
+          {
+            "name": "measure-download-code",
+            "in": "path",
+            "description": "The measure download code.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Measure download successfully retrieved.",
+            "content": {
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                "schema": {
+                  "$ref": "#/components/schemas/File"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No measure download was found matching the measure download code.",
+            "content": {
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/measure-downloads/across-reporting-units/{measure-download-code}": {
+      "get": {
+        "tags": [
+          "MeasureDownloads"
+        ],
+        "summary": "Gets a measure across reporting unit download.",
+        "description": "Gets a measure across reporting unit download, in XLSX format, for the supplied measure download code.",
+        "parameters": [
+          {
+            "name": "measure-download-code",
+            "in": "path",
+            "description": "The measure download code.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Measure across reporting unit download successfully retrieved.",
+            "content": {
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                "schema": {
+                  "$ref": "#/components/schemas/File"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No measure across reporting unit download was found matching the measure download code.",
+            "content": {
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reporting-units-downloads/datasheet-codes": {
+      "get": {
+        "tags": [
+          "ReportingUnitDownloads"
+        ],
+        "summary": "Gets a dictionary, indexed by the datasheet code, of the reporting unit datasheet codes available.",
+        "description": "Gets dictionary, indexed by the datasheet code, of all available reporting unit datasheet codes and descriptions that can be used in the reporting unit download API call.",
+        "parameters": [
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Download codes successfully retrieved. Empty dictionary will be returned for no matches.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DatasheetConfigurationSummaryModel"
+                    }
+                  }
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DatasheetConfigurationSummaryModel"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reporting-units-downloads/mappings": {
+      "get": {
+        "tags": [
+          "ReportingUnitDownloads"
+        ],
+        "summary": "Gets the reporting unit mapping download.",
+        "description": "Gets the reporting unit mapping download, in XLSX format.",
+        "parameters": [
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reporting unit mapping download successfully retrieved.",
+            "content": {
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                "schema": {
+                  "$ref": "#/components/schemas/File"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reporting-units-downloads/{datasheet-code}/{reporting-unit-code}": {
+      "get": {
+        "tags": [
+          "ReportingUnitDownloads"
+        ],
+        "summary": "Gets a reporting unit data download.",
+        "description": "Gets a reporting unit data download, in XLSX format, for the supplied reporting unit code and datasheet code.",
+        "parameters": [
+          {
+            "name": "datasheet-code",
+            "in": "path",
+            "description": "The datasheet code.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "reporting-unit-code",
+            "in": "path",
+            "description": "The reporting unit code.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reporting unit data download successfully retrieved.",
+            "content": {
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                "schema": {
+                  "$ref": "#/components/schemas/File"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No reporting unit was found matching the reporting unit code.",
+            "content": {
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/simple-downloads/download-codes": {
+      "get": {
+        "tags": [
+          "SimpleDownloads"
+        ],
+        "summary": "Gets a dictionary, indexed by the simple download code, of the simple downloads available.",
+        "description": "Gets dictionary, indexed by the simple download code, of all available simple download codes and descriptions that can be used in the simple download API call.",
+        "parameters": [
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Simple download codes successfully retrieved. Empty dictionary will be returned for no matches.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DatasheetConfigurationSummaryModel"
+                    }
+                  }
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DatasheetConfigurationSummaryModel"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/simple-downloads/{download-code}": {
+      "get": {
+        "tags": [
+          "SimpleDownloads"
+        ],
+        "summary": "Gets a simple download.",
+        "description": "Gets a simple download, in XLSX format, for the supplied download code.",
+        "parameters": [
+          {
+            "name": "download-code",
+            "in": "path",
+            "description": "The download code.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Download successfully retrieved.",
+            "content": {
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                "schema": {
+                  "$ref": "#/components/schemas/File"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No download was found matching the download code.",
+            "content": {
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/flat-formatted-data-extract/{measure-category-code}": {
+      "get": {
+        "tags": [
+          "FlatDataExtracts"
+        ],
+        "summary": "Gets flat formatted data.",
+        "description": "Gets formatted data in a flattened structure with each item corresponding to a single data point. \\\r\n                Data is restricted to within a single measure category and can be optionally filtered by measure, reporting unit code, reporting unit type and reporting dates. Matching within each filter is by logical disjunction (OR) and matching across filters is by logical conjunction (AND). \\\r\n                NOTE: There is currently a pagination restriction on this query that restricts requests to a maximum of 1000 results. Use skip and top to control this pagination. Sorting is not currently available.",
+        "parameters": [
+          {
+            "name": "measure-category-code",
+            "in": "path",
+            "description": "Specifies what measure category code the data should belongs to.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "The number of records to skip. This is used in the pagination of the data results to determine where to start taking the results from.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "top",
+            "in": "query",
+            "description": "The number of records to take. This is used in the pagination of the data results to determine how many results are retrieved. This value must be between 1 and 1000.",
+            "required": true,
+            "schema": {
+              "maximum": 1000,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "measure_code",
+            "in": "query",
+            "description": "Only include data that matches the specified measures.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "reporting_unit_code",
+            "in": "query",
+            "description": "Only include data for the specified reporting units.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "reporting_unit_type_code",
+            "in": "query",
+            "description": "Only include data for the specified reporting unit types.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "description": "Specifies that only data after a certain point should be returned. startDate can be a date of the form yyyy, yyyy-MM or yyyy-MM-dd. When only a year is specified, the search period starts at the beginning of the year, when a year and month are specified, the search period starts at the beginning of the month.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "description": "Specifies that only data before a certain point should be returned. endDate can be a date of the form yyyy, yyyy-MM or yyyy-MM-dd. When only a year is specified, the search period ends at the end of the year, when a year and month are specified, the search period ends at the end of the month.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data successfully retrieved. Empty list will be returned on no matches.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedFormattedDataExtractModel"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedFormattedDataExtractModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/flat-data-extract/{measure-category-code}": {
+      "get": {
+        "tags": [
+          "FlatDataExtracts"
+        ],
+        "summary": "Gets flat data.",
+        "description": "Gets data in a flattened structure with each item corresponding to a single data point. \\\r\n                Data is restricted to within a single measure category and can be optionally filtered by measure, reporting unit type and reporting dates. Matching within each filter is by logical disjunction (OR) and matching across filters is by logical conjunction (AND). \\\r\n                NOTE: There is currently a pagination restriction on this query that restricts requests to a maximum of 1000 results. Use skip and top to control this pagination. Sorting is not currently available.",
+        "parameters": [
+          {
+            "name": "measure-category-code",
+            "in": "path",
+            "description": "Specifies what measure category code the data should belongs to.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "The number of records to skip. This is used in the pagination of the data results to determine where to start taking the results from.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "top",
+            "in": "query",
+            "description": "The number of records to take. This is used in the pagination of the data results to determine how many results are retrieved. This value must be between 1 and 1000.",
+            "required": true,
+            "schema": {
+              "maximum": 1000,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "measure_code",
+            "in": "query",
+            "description": "Only include data that matches the specified measures.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "reporting_unit_code",
+            "in": "query",
+            "description": "Only include data for the specified reporting units.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "reporting_unit_type_code",
+            "in": "query",
+            "description": "Only include data for the specified reporting unit types.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "description": "Specifies that only data after a certain point should be returned. startDate can be a date of the form yyyy, yyyy-MM or yyyy-MM-dd. When only a year is specified, the search period starts at the beginning of the year, when a year and month are specified, the search period starts at the beginning of the month.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "description": "Specifies that only data before a certain point should be returned. endDate can be a date of the form yyyy, yyyy-MM or yyyy-MM-dd. When only a year is specified, the search period ends at the end of the year, when a year and month are specified, the search period ends at the end of the month.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data successfully retrieved. Empty list will be returned on no matches.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedDataExtractModel"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedDataExtractModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/measure-categories": {
+      "get": {
+        "tags": [
+          "MeasureCategories"
+        ],
+        "summary": "Gets a list of measure categories.",
+        "description": "Gets list of all measure categories available.",
+        "parameters": [
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Measure categories successfully retrieved. Empty list will be returned for no matches.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MeasureCategoryModel"
+                  }
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MeasureCategoryModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/measure-categories/{measure-category-code}": {
+      "get": {
+        "tags": [
+          "MeasureCategories"
+        ],
+        "summary": "Gets a single measure category.",
+        "description": "Gets a single measure category matching the supplied measure category code.",
+        "parameters": [
+          {
+            "name": "measure-category-code",
+            "in": "path",
+            "description": "The measure category code.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Measure category was successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeasureCategoryModel"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeasureCategoryModel"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No measure category was found matching the measure category code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/measure-categories/{measure-category-code}/measures": {
+      "get": {
+        "tags": [
+          "MeasureCategories"
+        ],
+        "summary": "Gets a list of measures for a measure category.",
+        "description": "Gets a list of measures for the specified measure category code.",
+        "parameters": [
+          {
+            "name": "measure-category-code",
+            "in": "path",
+            "description": "The measure category code.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Measure category was found and measures successfully retrieved. Empty list will be returned if there are no measures.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MeasureModel"
+                  }
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MeasureModel"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No measure category was found matching the measure category code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/measures": {
+      "get": {
+        "tags": [
+          "Measures"
+        ],
+        "summary": "Gets a list of measures.",
+        "description": "Gets list of all measures, optionally filtered, using logical disjunction (OR), by a list of measure category codes.",
+        "parameters": [
+          {
+            "name": "measure_category_code",
+            "in": "query",
+            "description": "The measure category codes.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Measures successfully retrieved. Empty list will be returned for no matches.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MeasureModel"
+                  }
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MeasureModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/measures/{measure-code}": {
+      "get": {
+        "tags": [
+          "Measures"
+        ],
+        "summary": "Gets a single measure.",
+        "description": "Gets a single measure matching the supplied measure code.",
+        "parameters": [
+          {
+            "name": "measure-code",
+            "in": "path",
+            "description": "The measure code.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Measure was successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeasureModel"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeasureModel"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No measure was found matching the measure code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/measures/{measure-code}/reporting-units-available": {
+      "get": {
+        "tags": [
+          "Measures"
+        ],
+        "summary": "Gets a list reporting units available for a measure.",
+        "description": "Gets a list of all reporting units that have data available for the specified measure.",
+        "parameters": [
+          {
+            "name": "measure-code",
+            "in": "path",
+            "description": "The measure code.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Measure was found and reporting units successfully retrieved. Empty list will be returned if there are no reporting units with data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReportingUnitSummaryModel"
+                  }
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReportingUnitSummaryModel"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No measure was found matching the measure code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/measures/{measure-code}/data-items": {
+      "get": {
+        "tags": [
+          "Measures"
+        ],
+        "summary": "Gets a list of data items for a measure.",
+        "description": "Gets a list of all data items for the specified measure.",
+        "parameters": [
+          {
+            "name": "measure-code",
+            "in": "path",
+            "description": "The measure code.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Measure was found and data items successfully retrieved. Empty list will be returned if there is no data available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DataItemModel"
+                  }
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DataItemModel"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No measure was found matching the measure code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reported-measure-categories": {
+      "get": {
+        "tags": [
+          "ReportedMeasureCategories"
+        ],
+        "summary": "Gets a list of reported measure categories.",
+        "description": "Gets list of all reported measure categories available.",
+        "parameters": [
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reported measure categories successfully retrieved. Empty list will be returned for no matches.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReportedMeasureCategoryModel"
+                  }
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReportedMeasureCategoryModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reported-measure-categories/{reported-measure-category-code}": {
+      "get": {
+        "tags": [
+          "ReportedMeasureCategories"
+        ],
+        "summary": "Gets a list of reported measure categories for the supplied reported measure category code.",
+        "description": "Gets a list reported measure categories matching the supplied reported measure category codes. \\\r\n                NOTE: Reported measure codes are not constrained to be unique in the system.",
+        "parameters": [
+          {
+            "name": "reported-measure-category-code",
+            "in": "path",
+            "description": "The reported measure category code.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reported measure category was successfully retrieved. Empty list will be returned for no matches.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReportedMeasureCategoryModel"
+                  }
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReportedMeasureCategoryModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reported-measure-categories/{reported-measure-category-code}/reported-measures": {
+      "get": {
+        "tags": [
+          "ReportedMeasureCategories"
+        ],
+        "summary": "Gets reported measures for a reported measure category.",
+        "description": "Gets a list of all reported measures for a specified reported measure category code.",
+        "parameters": [
+          {
+            "name": "reported-measure-category-code",
+            "in": "path",
+            "description": "The reported measure category code.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reported measures successfully retrieved. Empty list will be returned for no matches.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReportedMeasureModel"
+                  }
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReportedMeasureModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reported-measures": {
+      "get": {
+        "tags": [
+          "ReportedMeasures"
+        ],
+        "summary": "Gets a list of reported measures.",
+        "description": "Gets list of reported measures, optionally filtered by a list of measure and reported measure category codes. \\\r\n                Matching within each filter is by logical disjunction (OR) and matching across filters is by logical conjunction (AND).",
+        "parameters": [
+          {
+            "name": "measure_code",
+            "in": "query",
+            "description": "The measure codes.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "reported_measure_category_code",
+            "in": "query",
+            "description": "The reported measure category codes.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reported measures successfully retrieved. Empty list will be returned for no matches.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReportedMeasureModel"
+                  }
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReportedMeasureModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reported-measures/{reported-measure-code}": {
+      "get": {
+        "tags": [
+          "ReportedMeasures"
+        ],
+        "summary": "Gets a single reported measure.",
+        "description": "Gets a single reported measure matching the supplied reported measure code.",
+        "parameters": [
+          {
+            "name": "reported-measure-code",
+            "in": "path",
+            "description": "The reported measure code.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reported measure was successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportedMeasureModel"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportedMeasureModel"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No reported measure was found matching the reported measure code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reported-measures/{reported-measure-code}/data-items": {
+      "get": {
+        "tags": [
+          "ReportedMeasures"
+        ],
+        "summary": "Gets a list of data items for a reported measure.",
+        "description": "Gets a list of all data items for the specified reported measure.",
+        "parameters": [
+          {
+            "name": "reported-measure-code",
+            "in": "path",
+            "description": "The reported measure code.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reported measure was found and data items successfully retrieved. Empty list will be returned if there is no data available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DataItemModel"
+                  }
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DataItemModel"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No reported measure was found matching the reported measure code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reporting-units": {
+      "get": {
+        "tags": [
+          "ReportingUnits"
+        ],
+        "summary": "Gets a list of reporting units.",
+        "description": "Gets list of all reporting units, optionally filtered, using logical disjunction (OR), by a list of reporting unit type codes.",
+        "parameters": [
+          {
+            "name": "reporting_unit_type_code",
+            "in": "query",
+            "description": "The reporting unit type codes.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reporting units successfully retrieved. Empty list will be returned for no matches.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReportingUnitModel"
+                  }
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReportingUnitModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reporting-units/{reporting-unit-code}": {
+      "get": {
+        "tags": [
+          "ReportingUnits"
+        ],
+        "summary": "Gets a single reporting unit.",
+        "description": "Gets a single reporting unit matching the supplied reporting unit code.",
+        "parameters": [
+          {
+            "name": "reporting-unit-code",
+            "in": "path",
+            "description": "The reporting unit code.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reporting unit was successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportingUnitModel"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportingUnitModel"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No reporting unit was found matching the reporting unit code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reporting-units/{reporting-unit-code}/data-items": {
+      "get": {
+        "tags": [
+          "ReportingUnits"
+        ],
+        "summary": "Gets a list of data items for a reporting unit.",
+        "description": "Gets a list of all data items for the specified reporting unit.",
+        "parameters": [
+          {
+            "name": "reporting-unit-code",
+            "in": "path",
+            "description": "The reporting unit code.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reporting unit was found and data items successfully retrieved. Empty list will be returned if there is no data available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DataItemModel"
+                  }
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DataItemModel"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No reporting unit was found matching the reporting unit code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reporting-units/{reporting-unit-code}/measures-available": {
+      "get": {
+        "tags": [
+          "ReportingUnits"
+        ],
+        "summary": "Gets a list measures available for a reporting unit.",
+        "description": "Gets a list of all measures that have data available for the specified reporting unit.",
+        "parameters": [
+          {
+            "name": "reporting-unit-code",
+            "in": "path",
+            "description": "The reporting unit code.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reporting unit was found and measures successfully retrieved. Empty list will be returned if there is no measure data available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MeasureSummaryModel"
+                  }
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MeasureSummaryModel"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No reporting unit was found matching the reporting unit code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reporting-units/{reporting-unit-code}/bricks-available": {
+      "get": {
+        "tags": [
+          "ReportingUnits"
+        ],
+        "summary": "Gets a list brick codes available for a reporting unit.",
+        "description": "Gets a list of all brick codes available for the specified reporting unit.",
+        "parameters": [
+          {
+            "name": "reporting-unit-code",
+            "in": "path",
+            "description": "The reporting unit code.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reporting unit was found and brick codes successfully retrieved. Empty list will be returned if there are no brick codes available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No reporting unit was found matching the reporting unit code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reporting-unit-types": {
+      "get": {
+        "tags": [
+          "ReportingUnitTypes"
+        ],
+        "summary": "Gets a list of reporting unit types.",
+        "description": "Gets list of all reporting unit types.",
+        "parameters": [
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reporting units successfully retrieved. Empty list will be returned for no matches.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReportingUnitTypeModel"
+                  }
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReportingUnitTypeModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reporting-unit-types/{reporting-unit-type-code}": {
+      "get": {
+        "tags": [
+          "ReportingUnitTypes"
+        ],
+        "summary": "Gets a single reporting unit type.",
+        "description": "Gets a single reporting unit type matching the supplied reporting unit type code.",
+        "parameters": [
+          {
+            "name": "reporting-unit-type-code",
+            "in": "path",
+            "description": "The reporting unit type code.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reporting unit type was successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportingUnitTypeModel"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportingUnitTypeModel"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No reporting unit type was found matching the reporting unit type code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reporting-unit-types/{reporting-unit-type-code}/bricks-available": {
+      "get": {
+        "tags": [
+          "ReportingUnitTypes"
+        ],
+        "summary": "Gets a dictionary of reporting unit codes and available bricks.",
+        "description": "Gets a dictionary of reporting units codes and their available bricks, for the specified reporting unit type.",
+        "parameters": [
+          {
+            "name": "reporting-unit-type-code",
+            "in": "path",
+            "description": "The reporting unit type code.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reporting unit type was found and brick codes successfully retrieved. Empty dictionary will be returned if there are no brick codes available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No reporting unit type was found matching the reporting unit code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/suppressions": {
+      "get": {
+        "tags": [
+          "Suppressions"
+        ],
+        "summary": "Gets a list of suppressions.",
+        "description": "Gets list of all suppressions.\\\r\n                The Suppressions API call is now obsolete and callers should switch to: /api/v1/caveats.",
+        "parameters": [
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Suppressions successfully retrieved. Empty list will be returned for no matches.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SuppressionModel"
+                  }
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SuppressionModel"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/api/v1/suppressions/{suppression-code}": {
+      "get": {
+        "tags": [
+          "Suppressions"
+        ],
+        "summary": "Gets a suppression.",
+        "description": "Gets a suppression matching the supplied suppression code.\\\r\n                The Suppressions API call is now obsolete and callers should switch to: /api/v1/caveats/{caveat-code}.",
+        "parameters": [
+          {
+            "name": "suppression-code",
+            "in": "path",
+            "description": "The suppression code.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-SWAGGER-UI",
+            "in": "header",
+            "description": "For internal use",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reporting unit type was successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuppressionModel"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuppressionModel"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No suppression was found matching the suppression code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CaveatModel": {
+        "required": [
+          "caveat_code",
+          "caveat_name"
+        ],
+        "type": "object",
+        "properties": {
+          "caveat_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the corresponding Caveat."
+          },
+          "caveat_display_value": {
+            "type": "string",
+            "description": "The display value or symbol for the corresponding Caveat. If the Caveat has no symbol then this field will be null.",
+            "nullable": true
+          },
+          "caveat_footnote": {
+            "type": "string",
+            "description": "The footnote/explanation text for the corresponding Caveat. If the Caveat has no text then this field will be null.",
+            "nullable": true
+          },
+          "caveat_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the corresponding Caveat."
+          }
+        },
+        "additionalProperties": false,
+        "description": "A Caveat is a footnote or suppression used to apply to, or instead of, a data value."
+      },
+      "DataExtractModel": {
+        "required": [
+          "decimal_places",
+          "measure_category_code",
+          "measure_code",
+          "measure_name",
+          "reported_measure_category_code",
+          "reported_measure_category_name",
+          "reported_measure_category_type_code",
+          "reported_measure_category_type_name",
+          "reported_measure_code",
+          "reported_measure_name",
+          "reporting_end_date",
+          "reporting_start_date",
+          "reporting_unit_code",
+          "reporting_unit_name",
+          "reporting_unit_type_code",
+          "reporting_unit_type_name",
+          "units_are_prefix",
+          "units_name"
+        ],
+        "type": "object",
+        "properties": {
+          "caveat": {
+            "type": "string",
+            "description": "The Caveat symbols applicable to this DataItem. This will be null if there are no Caveats.",
+            "nullable": true
+          },
+          "caveat_codes": {
+            "type": "string",
+            "description": "Semi-colon separated list of Caveat codes applicable to this DataItem. This will be null if there are no Caveats.",
+            "nullable": true
+          },
+          "caveat_footnotes": {
+            "type": "string",
+            "description": "Semi-colon separated list of Caveat symbols and their explanatory footnote applicable to this DataItem. This will be null if there are no Caveats.",
+            "nullable": true
+          },
+          "data_set_caveat": {
+            "type": "string",
+            "description": "The Caveat symbols applicable to the corresponding DataSet. This will be null if there are no Caveats.",
+            "nullable": true
+          },
+          "data_set_caveat_codes": {
+            "type": "string",
+            "description": "Semi-colon separated list of Caveat codes applicable to the corresponding DataSet. This will be null if there are no Caveats.",
+            "nullable": true
+          },
+          "data_set_caveat_footnotes": {
+            "type": "string",
+            "description": "Semi-colon separated list of Caveat symbols and their explanatory footnote applicable to the corresponding DataSet. This will be null if there are no Caveats.",
+            "nullable": true
+          },
+          "data_set_meta_tag_codes": {
+            "type": "string",
+            "description": "Semi-colon separated list of MetaTag codes for the corresponding DataSet. This will be null if there are no DataSet MetaTags.",
+            "nullable": true
+          },
+          "data_set_meta_tags": {
+            "type": "string",
+            "description": "Semi-colon separated list of MetaTag values for the corresponding DataSet. This will be null if there are no DataSet MetaTags.",
+            "nullable": true
+          },
+          "data_set_meta_tags_with_type": {
+            "type": "string",
+            "description": "Semi-colon separated list of MetaTag values for the corresponding DataSet. Each MetaTag value matches the pattern MetaTagTypeCode|MetaTagValue. This will be null if there are no DataSet MetaTags.",
+            "nullable": true
+          },
+          "decimal_places": {
+            "type": "integer",
+            "description": "The number of decimal places that the data can be expressed to.",
+            "format": "int32"
+          },
+          "group_number": {
+            "type": "integer",
+            "description": "Indicates a quintile, decile or other grouping number for the data value. This will be null if it is not applicable.",
+            "format": "int32",
+            "nullable": true
+          },
+          "units_are_prefix": {
+            "type": "boolean",
+            "description": "Whether the units should be applied as a prefix or suffix to the data value. e.g. $ (prefix) and % (suffix)."
+          },
+          "lower_value": {
+            "type": "number",
+            "description": "Represents the lower data value if this DataItem is a data range or has a confidence interval, otherwise this will be null.",
+            "format": "double",
+            "nullable": true
+          },
+          "mapped_state": {
+            "type": "string",
+            "description": "The state abbreviation of the corresponding ReportingUnit's associated state.",
+            "nullable": true
+          },
+          "measure_category_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the associated MeasureCategory."
+          },
+          "measure_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the associated Measure."
+          },
+          "measure_meta_tag_codes": {
+            "type": "string",
+            "description": "Semi-colon separated list of MetaTag codes for the corresponding Measure. This will be null if there are no Measure MetaTags.",
+            "nullable": true
+          },
+          "measure_meta_tags": {
+            "type": "string",
+            "description": "Semi-colon separated list of MetaTag values for the corresponding Measure. This will be null if there are no Measure MetaTags.",
+            "nullable": true
+          },
+          "measure_meta_tags_with_type": {
+            "type": "string",
+            "description": "Semi-colon separated list of MetaTag values for the corresponding Measure. Each MetaTag value matches the pattern MetaTagTypeCode|MetaTagValue. This will be null if there are no Measure MetaTags.",
+            "nullable": true
+          },
+          "measure_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the associated Measure."
+          },
+          "peer_caveat": {
+            "type": "string",
+            "description": "The Caveats symbols for the peer group value for this DataItem. If there are no peer caveats or no peer group then this will be null.",
+            "nullable": true
+          },
+          "peer_caveat_codes": {
+            "type": "string",
+            "description": "Semi-colon separated list of Caveats codes for the peer group value for this DataItem. If there are no peer caveats or no peer group then this will be null.",
+            "nullable": true
+          },
+          "peer_caveat_footnotes": {
+            "type": "string",
+            "description": "Semi-colon separated list of Caveat symbols and their explanatory footnote applicable to the peer group value for this DataItem. If there are no peer caveats or no peer group then this will be null.",
+            "nullable": true
+          },
+          "peer_group_name": {
+            "type": "string",
+            "description": "The PeerGroup name for the associated PeerGroup ReportingUnit. If there is no peer then this will be null.",
+            "nullable": true
+          },
+          "peer_suppression": {
+            "type": "string",
+            "description": "The Suppressions symbols for the peer group value for this DataItem. If there are no peer suppressions or no peer group then this will be null.",
+            "nullable": true,
+            "deprecated": true
+          },
+          "peer_suppression_codes": {
+            "type": "string",
+            "description": "Semi-colon separated list of Suppressions codes for the peer group value for this DataItem. If there are no peer suppressions or no peer group then this will be null.",
+            "nullable": true,
+            "deprecated": true
+          },
+          "peer_value": {
+            "type": "number",
+            "description": "The peer data value for this DataItem. This may be null if the peer data is suppressed or there is no peer.",
+            "format": "double",
+            "nullable": true
+          },
+          "proxy_children": {
+            "type": "string",
+            "description": "Semi-colon separated list of the names of any ReportingUnits that the associated ReportingUnit is reporting for/including in the data value.",
+            "nullable": true
+          },
+          "proxy_reporting_unit_name": {
+            "type": "string",
+            "description": "The name of the hospital that reports on behalf of the associated ReportingUnit. This will be null if there is no proxy reporting.",
+            "nullable": true
+          },
+          "reported_measure_category_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the first ReportedMeasure category."
+          },
+          "reported_measure_category_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the first ReportedMeasure category."
+          },
+          "reported_measure_category_three_code": {
+            "type": "string",
+            "description": "The code for the third ReportedMeasure category. This will be null if the ReportedMeasure does not have 3 categories.",
+            "nullable": true
+          },
+          "reported_measure_category_three_name": {
+            "type": "string",
+            "description": "The name for the third ReportedMeasure category. This will be null if the ReportedMeasure does not have 3 categories.",
+            "nullable": true
+          },
+          "reported_measure_category_two_code": {
+            "type": "string",
+            "description": "The code for the second ReportedMeasure category. This will be null if the ReportedMeasure does not have 2 categories.",
+            "nullable": true
+          },
+          "reported_measure_category_two_name": {
+            "type": "string",
+            "description": "The name for the second ReportedMeasure category. This will be null if the ReportedMeasure does not have 2 categories.",
+            "nullable": true
+          },
+          "reported_measure_category_type_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the first ReportedMeasure category type."
+          },
+          "reported_measure_category_type_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the first ReportedMeasure category type."
+          },
+          "reported_measure_category_three_type_code": {
+            "type": "string",
+            "description": "The code for the third ReportedMeasure category type. This will be null if the ReportedMeasure does not have 3 categories.",
+            "nullable": true
+          },
+          "reported_measure_category_three_type_name": {
+            "type": "string",
+            "description": "The name for the third ReportedMeasure category type. This will be null if the ReportedMeasure does not have 3 categories.",
+            "nullable": true
+          },
+          "reported_measure_category_two_type_code": {
+            "type": "string",
+            "description": "The code for the second ReportedMeasure category type. This will be null if the ReportedMeasure does not have 2 categories.",
+            "nullable": true
+          },
+          "reported_measure_category_two_type_name": {
+            "type": "string",
+            "description": "The name for the second ReportedMeasure category type. This will be null if the ReportedMeasure does not have 2 categories.",
+            "nullable": true
+          },
+          "reported_measure_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the associated ReportedMeasure."
+          },
+          "reported_measure_meta_tag_codes": {
+            "type": "string",
+            "description": "Semi-colon separated list of MetaTag codes for the corresponding ReportedMeasure. This will be null if there are no ReportedMeasure MetaTags.",
+            "nullable": true
+          },
+          "reported_measure_meta_tags": {
+            "type": "string",
+            "description": "Semi-colon separated list of MetaTag values for the corresponding ReportedMeasure. This will be null if there are no ReportedMeasure MetaTags.",
+            "nullable": true
+          },
+          "reported_measure_meta_tags_with_type": {
+            "type": "string",
+            "description": "Semi-colon separated list of MetaTag values for the corresponding ReportedMeasure. Each MetaTag value matches the pattern MetaTagTypeCode|MetaTagValue. This will be null if there are no ReportedMeasure MetaTags.",
+            "nullable": true
+          },
+          "reported_measure_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the associated ReportedMeasure."
+          },
+          "reporting_end_date": {
+            "type": "string",
+            "description": "The end date for the DataSet data period.",
+            "format": "date-time"
+          },
+          "reporting_start_date": {
+            "type": "string",
+            "description": "The start date for the DataSet data period.",
+            "format": "date-time"
+          },
+          "reporting_unit_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the associated ReportingUnit."
+          },
+          "reporting_unit_meta_tag_codes": {
+            "type": "string",
+            "description": "Semi-colon separated list of MetaTag codes for the corresponding ReportingUnit. This will be null if there are no ReportingUnit MetaTags.",
+            "nullable": true
+          },
+          "reporting_unit_meta_tags": {
+            "type": "string",
+            "description": "Semi-colon separated list of MetaTag values for the corresponding ReportingUnit. This will be null if there are no ReportingUnit MetaTags.",
+            "nullable": true
+          },
+          "reporting_unit_meta_tags_with_type": {
+            "type": "string",
+            "description": "Semi-colon separated list of MetaTag values for the corresponding ReportingUnit. Each MetaTag value matches the pattern MetaTagTypeCode|MetaTagValue. This will be null if there are no ReportingUnit MetaTags.",
+            "nullable": true
+          },
+          "reporting_unit_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the associated ReportingUnit."
+          },
+          "reporting_unit_type_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the associated ReportingUnitType."
+          },
+          "reporting_unit_type_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the associated ReportingUnitType."
+          },
+          "suppression": {
+            "type": "string",
+            "description": "The Suppression symbols applicable to this DataItem. This will be null if there are no Suppressions.",
+            "nullable": true,
+            "deprecated": true
+          },
+          "suppression_codes": {
+            "type": "string",
+            "description": "Semi-colon separated list of Suppression codes applicable to this DataItem. This will be null if there are no Suppressions.",
+            "nullable": true,
+            "deprecated": true
+          },
+          "units_display": {
+            "type": "string",
+            "description": "The display symbol or text for the units for the data value. For units without a symbol this will be null.",
+            "nullable": true
+          },
+          "units_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the corresponding Units."
+          },
+          "upper_value": {
+            "type": "number",
+            "description": "Represents the upper data value if this DataItem is a data range or has a confidence interval, otherwise this will be null.",
+            "format": "double",
+            "nullable": true
+          },
+          "value": {
+            "type": "number",
+            "description": "The data value for this item. This data value may be null if the data is suppressed, in which case a caveat will be present in the Caveats list.",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "A DataExtract item is a flattened structure encapsulates a single DataItem and includes the DataItem's associated attributes."
+      },
+      "DataExtractPagination": {
+        "type": "object",
+        "properties": {
+          "results_returned": {
+            "type": "integer",
+            "description": "The number of results returned in this response.",
+            "format": "int32"
+          },
+          "starting_result_index": {
+            "type": "integer",
+            "description": "The index of the starting result in this list. This corresponds to the skip + 1 from the pagination request.",
+            "format": "int32"
+          },
+          "total_results_available": {
+            "type": "integer",
+            "description": "The total number of results available via pagination.",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Provides the pagination details for a paginated results set."
+      },
+      "DataItemModel": {
+        "required": [
+          "caveats",
+          "data_set_id",
+          "measure_code",
+          "reported_measure_code",
+          "reporting_unit_summary"
+        ],
+        "type": "object",
+        "properties": {
+          "caveats": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CaveatModel"
+            },
+            "description": "List of Caveats applicable to this DataItem. This list will be empty if there are no Caveats."
+          },
+          "data_set_id": {
+            "type": "integer",
+            "description": "The id for the associated DataSet.",
+            "format": "int32"
+          },
+          "group_number": {
+            "type": "integer",
+            "description": "Indicates a quintile, decile or other grouping number for the data value. This will be null if it is not applicable.",
+            "format": "int32",
+            "nullable": true
+          },
+          "lower_value": {
+            "type": "number",
+            "description": "Represents the lower data value if this DataItem is a data range or has a confidence interval, otherwise this will be null.",
+            "format": "double",
+            "nullable": true
+          },
+          "measure_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the associated Measure."
+          },
+          "peer_group_summary": {
+            "$ref": "#/components/schemas/ReportingUnitSummaryModel"
+          },
+          "proxy_reporting_unit_summary": {
+            "$ref": "#/components/schemas/ReportingUnitSummaryModel"
+          },
+          "reported_measure_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the associated ReportedMeasure."
+          },
+          "reporting_unit_summary": {
+            "$ref": "#/components/schemas/ReportingUnitSummaryModel"
+          },
+          "suppressions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SuppressionModel"
+            },
+            "description": "Gets or sets the suppressions.",
+            "nullable": true,
+            "deprecated": true
+          },
+          "upper_value": {
+            "type": "number",
+            "description": "Represents the upper data value if this DataItem is a data range or has a confidence interval, otherwise this will be null.",
+            "format": "double",
+            "nullable": true
+          },
+          "value": {
+            "type": "number",
+            "description": "The data value for this DataItem. This data value may be null if the data is suppressed, in which case a caveat will be present in the Caveats list.",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "A DataItem encapsulates a data value for a specific Unit (ReportingUnit) covering a specific data period (DataSet)."
+      },
+      "DataSetModel": {
+        "required": [
+          "caveats",
+          "data_set_id",
+          "data_set_name",
+          "meta_tags",
+          "reported_measure_summary",
+          "reporting_end_date",
+          "reporting_start_date"
+        ],
+        "type": "object",
+        "properties": {
+          "caveats": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CaveatModel"
+            },
+            "description": "List of Caveats applicable to this DataSet. This list will be empty if there are no Caveats."
+          },
+          "data_set_id": {
+            "type": "integer",
+            "description": "The id for the DataSet.",
+            "format": "int32"
+          },
+          "data_set_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The display name for the corresponding DataSet."
+          },
+          "meta_tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MetaTagModel"
+            },
+            "description": "List of MetaTags applicable to this DataSet. This list will be empty if there are no MetaTags."
+          },
+          "reported_measure_summary": {
+            "$ref": "#/components/schemas/ReportedMeasureSummaryModel"
+          },
+          "reporting_end_date": {
+            "type": "string",
+            "description": "The end date for the DataSet data period.",
+            "format": "date-time"
+          },
+          "reporting_start_date": {
+            "type": "string",
+            "description": "The start date for the DataSet data period.",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false,
+        "description": "A DataSet represents a specific data period for a specific ReportedMeasure and is used to group DataItems."
+      },
+      "DatasheetConfigurationSummaryModel": {
+        "required": [
+          "datasheet_code",
+          "datasheet_description",
+          "datasheet_type"
+        ],
+        "type": "object",
+        "properties": {
+          "datasheet_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code used to specify the datasheet download."
+          },
+          "datasheet_description": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The description of the datasheet that will be generated using this code."
+          },
+          "datasheet_type": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The type of datasheet that will be generated using this code."
+          }
+        },
+        "additionalProperties": false,
+        "description": "A DatasheetConfigurationSummary provides the details of what datasheets are available for generation."
+      },
+      "File": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "FormattedDataExtractModel": {
+        "required": [
+          "data_period",
+          "data_period_type",
+          "data_set_id",
+          "measure_category_code",
+          "measure_category_name",
+          "measure_code",
+          "measure_name",
+          "private",
+          "reported_measure_category_code",
+          "reported_measure_category_name",
+          "reported_measure_category_type_code",
+          "reported_measure_category_type_name",
+          "reported_measure_code",
+          "reported_measure_name",
+          "reporting_end_date",
+          "reporting_start_date",
+          "reporting_unit_code",
+          "reporting_unit_name",
+          "reporting_unit_type_code",
+          "reporting_unit_type_name"
+        ],
+        "type": "object",
+        "properties": {
+          "caveat": {
+            "type": "string",
+            "description": "The Caveat symbols applicable to this DataItem. This will be null if there are no Caveats.",
+            "nullable": true
+          },
+          "caveat_codes": {
+            "type": "string",
+            "description": "Semi-colon separated list of Caveat codes applicable to this DataItem. This will be null if there are no Caveats.",
+            "nullable": true
+          },
+          "caveat_footnotes": {
+            "type": "string",
+            "description": "Semi-colon separated list of Caveat symbols and their explanatory footnote applicable to this DataItem. This will be null if there are no Caveats.",
+            "nullable": true
+          },
+          "data_set_caveat": {
+            "type": "string",
+            "description": "The Caveat symbols applicable to the corresponding DataSet. This will be null if there are no Caveats.",
+            "nullable": true
+          },
+          "data_set_caveat_codes": {
+            "type": "string",
+            "description": "Semi-colon separated list of Caveat codes applicable to the corresponding DataSet. This will be null if there are no Caveats.",
+            "nullable": true
+          },
+          "data_set_caveat_footnotes": {
+            "type": "string",
+            "description": "Semi-colon separated list of Caveat symbols and their explanatory footnote applicable to the corresponding DataSet. This will be null if there are no Caveats.",
+            "nullable": true
+          },
+          "data_period": {
+            "minLength": 1,
+            "type": "string",
+            "description": "A formatted display of the data period including the start and end dates."
+          },
+          "data_period_type": {
+            "minLength": 1,
+            "type": "string",
+            "description": "A description of the data period type, e.g. FinancialYear."
+          },
+          "data_set_id": {
+            "type": "integer",
+            "description": "The id for the corresponding DataSet.",
+            "format": "int32"
+          },
+          "data_set_meta_tag_codes": {
+            "type": "string",
+            "description": "Semi-colon separated list of MetaTag codes for the corresponding DataSet. This will be null if there are no DataSet MetaTags.",
+            "nullable": true
+          },
+          "data_set_meta_tags": {
+            "type": "string",
+            "description": "Semi-colon separated list of MetaTag values for the corresponding DataSet. This will be null if there are no DataSet MetaTags.",
+            "nullable": true
+          },
+          "data_set_meta_tags_with_type": {
+            "type": "string",
+            "description": "Semi-colon separated list of MetaTag values for the corresponding DataSet. Each MetaTag value matches the pattern MetaTagTypeCode|MetaTagValue. This will be null if there are no DataSet MetaTags.",
+            "nullable": true
+          },
+          "formatted_peer_value": {
+            "type": "string",
+            "description": "A formatted display of the peer data value including any caveats and units. This will be null if there is no peer.",
+            "nullable": true
+          },
+          "formatted_value": {
+            "type": "string",
+            "description": "A formatted display of the data value including any caveats and units.",
+            "nullable": true
+          },
+          "group_number": {
+            "type": "integer",
+            "description": "Indicates a quintile, decile or other grouping number for the data value. This will be null if it is not applicable.",
+            "format": "int32",
+            "nullable": true
+          },
+          "private": {
+            "type": "boolean",
+            "description": "Indicates whether this ReportingUnit is private, e.g. a private hospital."
+          },
+          "mapped_local_hospital_network": {
+            "type": "string",
+            "description": "The LHN name for the corresponding ReportingUnit's associated LHN. This will be null if the ReportingUnit has no mapped LHN.",
+            "nullable": true
+          },
+          "mapped_primary_health_network": {
+            "type": "string",
+            "description": "The PHN name for the corresponding ReportingUnit's associated PHN. This will be null if the ReportingUnit has no mapped PHN.",
+            "nullable": true
+          },
+          "mapped_state": {
+            "type": "string",
+            "description": "The state abbreviation of the corresponding ReportingUnit's associated state.",
+            "nullable": true
+          },
+          "measure_category_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the associated MeasureCategory."
+          },
+          "measure_category_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the associated MeasureCategory."
+          },
+          "measure_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the associated Measure."
+          },
+          "measure_meta_tag_codes": {
+            "type": "string",
+            "description": "Semi-colon separated list of MetaTag codes for the corresponding Measure. This will be null if there are no Measure MetaTags.",
+            "nullable": true
+          },
+          "measure_meta_tags": {
+            "type": "string",
+            "description": "Semi-colon separated list of MetaTag values for the corresponding Measure. This will be null if there are no Measure MetaTags.",
+            "nullable": true
+          },
+          "measure_meta_tags_with_type": {
+            "type": "string",
+            "description": "Semi-colon separated list of MetaTag values for the corresponding Measure. Each MetaTag value matches the pattern MetaTagTypeCode|MetaTagValue. This will be null if there are no Measure MetaTags.",
+            "nullable": true
+          },
+          "measure_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the associated Measure."
+          },
+          "peer_group_code": {
+            "type": "string",
+            "description": "The code for the associated PeerGroup. This will be null if there is no peer.",
+            "nullable": true
+          },
+          "peer_group_name": {
+            "type": "string",
+            "description": "The name for the associated PeerGroup. This will be null if there is no peer.",
+            "nullable": true
+          },
+          "proxy_reporting_unit_name": {
+            "type": "string",
+            "description": "The name of the proxy reporting unit that reports on behalf of the associated ReportingUnit. This will be null if there is no proxy reporting.",
+            "nullable": true
+          },
+          "raw_lower_value": {
+            "type": "number",
+            "description": "Represents the lower data value if this DataItem is a data range or has a confidence interval, otherwise this will be null.",
+            "format": "double",
+            "nullable": true
+          },
+          "raw_peer_value": {
+            "type": "number",
+            "description": "The peer data value for this DataItem. This may be null if the peer data is suppressed or there is no peer.",
+            "format": "double",
+            "nullable": true
+          },
+          "raw_upper_value": {
+            "type": "number",
+            "description": "Represents the upper data value if this DataItem is a data range or has a confidence interval, otherwise this will be null.",
+            "format": "double",
+            "nullable": true
+          },
+          "raw_value": {
+            "type": "number",
+            "description": "The data value for this item. This data value may be null if the data is suppressed, in which case a caveat will be present in the Caveats list.",
+            "format": "double",
+            "nullable": true
+          },
+          "reported_measure_category_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the first ReportedMeasure category."
+          },
+          "reported_measure_category_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the first ReportedMeasure category."
+          },
+          "reported_measure_category_three_code": {
+            "type": "string",
+            "description": "The code for the third ReportedMeasure category. This will be null if the ReportedMeasure does not have 3 categories.",
+            "nullable": true
+          },
+          "reported_measure_category_three_name": {
+            "type": "string",
+            "description": "The name for the third ReportedMeasure category. This will be null if the ReportedMeasure does not have 3 categories.",
+            "nullable": true
+          },
+          "reported_measure_category_two_code": {
+            "type": "string",
+            "description": "The code for the second ReportedMeasure category. This will be null if the ReportedMeasure does not have 2 categories.",
+            "nullable": true
+          },
+          "reported_measure_category_two_name": {
+            "type": "string",
+            "description": "The name for the second ReportedMeasure category. This will be null if the ReportedMeasure does not have 2 categories.",
+            "nullable": true
+          },
+          "reported_measure_category_type_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the first ReportedMeasure category."
+          },
+          "reported_measure_category_type_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the first ReportedMeasure category type."
+          },
+          "reported_measure_category_three_type_code": {
+            "type": "string",
+            "description": "The code for the third ReportedMeasure category type. This will be null if the ReportedMeasure does not have 3 categories.",
+            "nullable": true
+          },
+          "reported_measure_category_three_type_name": {
+            "type": "string",
+            "description": "The name for the third ReportedMeasure category type. This will be null if the ReportedMeasure does not have 3 categories.",
+            "nullable": true
+          },
+          "reported_measure_category_two_type_code": {
+            "type": "string",
+            "description": "The code for the second ReportedMeasure category type. This will be null if the ReportedMeasure does not have 2 categories.",
+            "nullable": true
+          },
+          "reported_measure_category_two_type_name": {
+            "type": "string",
+            "description": "The name for the second ReportedMeasure category type. This will be null if the ReportedMeasure does not have 2 categories.",
+            "nullable": true
+          },
+          "reported_measure_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the associated ReportedMeasure."
+          },
+          "reported_measure_meta_tag_codes": {
+            "type": "string",
+            "description": "Semi-colon separated list of MetaTag codes for the corresponding ReportedMeasure. This will be null if there are no ReportedMeasure MetaTags.",
+            "nullable": true
+          },
+          "reported_measure_meta_tags": {
+            "type": "string",
+            "description": "Semi-colon separated list of MetaTag values for the corresponding ReportedMeasure. This will be null if there are no ReportedMeasure MetaTags.",
+            "nullable": true
+          },
+          "reported_measure_meta_tags_with_type": {
+            "type": "string",
+            "description": "Semi-colon separated list of MetaTag values for the corresponding ReportedMeasure. Each MetaTag value matches the pattern MetaTagTypeCode|MetaTagValue. This will be null if there are no ReportedMeasure MetaTags.",
+            "nullable": true
+          },
+          "reported_measure_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the associated ReportedMeasure."
+          },
+          "reporting_end_date": {
+            "type": "string",
+            "description": "The end date for the DataSet data period.",
+            "format": "date-time"
+          },
+          "reporting_start_date": {
+            "type": "string",
+            "description": "The start date for the DataSet data period.",
+            "format": "date-time"
+          },
+          "reporting_unit_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the associated ReportingUnit."
+          },
+          "reporting_unit_meta_tag_codes": {
+            "type": "string",
+            "description": "Semi-colon separated list of MetaTag codes for the corresponding ReportingUnit. This will be null if there are no ReportingUnit MetaTags.",
+            "nullable": true
+          },
+          "reporting_unit_meta_tags": {
+            "type": "string",
+            "description": "Semi-colon separated list of MetaTag values for the corresponding ReportingUnit. This will be null if there are no ReportingUnit MetaTags.",
+            "nullable": true
+          },
+          "reporting_unit_meta_tags_with_type": {
+            "type": "string",
+            "description": "Semi-colon separated list of MetaTag values for the corresponding ReportingUnit. Each MetaTag value matches the pattern MetaTagTypeCode|MetaTagValue. This will be null if there are no ReportingUnit MetaTags.",
+            "nullable": true
+          },
+          "reporting_unit_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the associated ReportingUnit."
+          },
+          "reporting_unit_type_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the associated ReportingUnitType."
+          },
+          "reporting_unit_type_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the associated ReportingUnitType."
+          },
+          "suppression": {
+            "type": "string",
+            "description": "The Suppression symbols applicable to this DataItem. This will be null if there are no Suppressions.",
+            "nullable": true,
+            "deprecated": true
+          },
+          "suppression_codes": {
+            "type": "string",
+            "description": "Semi-colon separated list of Suppression codes applicable to this DataItem. This will be null if there are no Suppressions.",
+            "nullable": true,
+            "deprecated": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "A FormattedDataExtract item is a flattened structure which encapsulates a single DataItem and includes a formatted display value and the DataItem's associated attributes."
+      },
+      "MappedReportingUnitModel": {
+        "required": [
+          "map_type",
+          "mapped_reporting_unit"
+        ],
+        "type": "object",
+        "properties": {
+          "mapped_reporting_unit": {
+            "$ref": "#/components/schemas/ReportingUnitSummaryModel"
+          },
+          "map_type": {
+            "$ref": "#/components/schemas/MappedReportingUnitTypeModel"
+          }
+        },
+        "additionalProperties": false,
+        "description": "A MappedReportingUnit is used to show a relationship between two ReportingUnits."
+      },
+      "MappedReportingUnitTypeModel": {
+        "required": [
+          "mapped_reporting_unit_code",
+          "mapped_reporting_unit_name"
+        ],
+        "type": "object",
+        "properties": {
+          "mapped_reporting_unit_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the corresponding MappedReportingUnitType."
+          },
+          "mapped_reporting_unit_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the corresponding MappedReportingUnitType."
+          }
+        },
+        "additionalProperties": false,
+        "description": "A MappedReportingUnitType indicates the type of relationship for a ReportingUnitMapping giving context to the relationship."
+      },
+      "MeasureCategoryModel": {
+        "required": [
+          "measure_category_code",
+          "measure_category_name"
+        ],
+        "type": "object",
+        "properties": {
+          "measure_category_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the corresponding MeasureCategory."
+          },
+          "measure_category_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the corresponding MeasureCategory."
+          }
+        },
+        "additionalProperties": false,
+        "description": "A MeasureCategory is used to provide grouping of Measures."
+      },
+      "MeasureModel": {
+        "required": [
+          "measure_categories",
+          "measure_code",
+          "measure_name",
+          "meta_tags",
+          "units"
+        ],
+        "type": "object",
+        "properties": {
+          "measure_categories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MeasureCategoryModel"
+            },
+            "description": "List of MeasureCategories applicable to this Measure."
+          },
+          "measure_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the corresponding Measure."
+          },
+          "measure_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the corresponding Measure."
+          },
+          "meta_tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MetaTagModel"
+            },
+            "description": "List of MetaTags applicable to this Measure. This list will be empty if there are no MetaTags."
+          },
+          "units": {
+            "$ref": "#/components/schemas/UnitsModel"
+          }
+        },
+        "additionalProperties": false,
+        "description": "A Measure is a statistic used to measure something. Some measures are performance indicators (e.g. median waiting times for elective surgery) and some provide context for\r\n            these indicators (e.g. number of elective surgeries)."
+      },
+      "MeasureSummaryModel": {
+        "required": [
+          "measure_code",
+          "measure_name"
+        ],
+        "type": "object",
+        "properties": {
+          "measure_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the corresponding Measure."
+          },
+          "measure_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the corresponding Measure."
+          }
+        },
+        "additionalProperties": false,
+        "description": "A MeasureSummaryModel details just the code and name of a Measure without any additional fields."
+      },
+      "MetaTagModel": {
+        "required": [
+          "meta_tag_code",
+          "meta_tag_name",
+          "meta_tag_type"
+        ],
+        "type": "object",
+        "properties": {
+          "meta_tag_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code representing the MetaTag."
+          },
+          "meta_tag_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The display text for the MetaTag."
+          },
+          "meta_tag_type": {
+            "$ref": "#/components/schemas/MetaTagTypeModel"
+          }
+        },
+        "additionalProperties": false,
+        "description": "A MetaTag is a grouping category that can be applied to a Measure, ReportedMeasure, ReportingUnit or DataSet."
+      },
+      "MetaTagTypeModel": {
+        "required": [
+          "meta_tag_type_code",
+          "meta_tag_type_name"
+        ],
+        "type": "object",
+        "properties": {
+          "meta_tag_type_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the corresponding MetaTagType."
+          },
+          "meta_tag_type_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the corresponding MetaTagType."
+          }
+        },
+        "additionalProperties": false,
+        "description": "A MetaTagType indicates the type for a series of MetaTags and acts as a MetaTag grouping."
+      },
+      "PaginatedDataExtractModel": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DataExtractModel"
+            },
+            "description": "The list of DataExtract items.",
+            "nullable": true
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/DataExtractPagination"
+          }
+        },
+        "additionalProperties": false,
+        "description": "A paginated results set containing a list of DataExtract items and the pagination information for the request."
+      },
+      "PaginatedFormattedDataExtractModel": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FormattedDataExtractModel"
+            },
+            "description": "The list of FormattedDataExtract items.",
+            "nullable": true
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/DataExtractPagination"
+          }
+        },
+        "additionalProperties": false,
+        "description": "A paginated results set containing a list of FormattedDataExtract items and the pagination information for the request."
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "ReportedMeasureCategoryModel": {
+        "required": [
+          "reported_measure_category_code",
+          "reported_measure_category_name",
+          "reported_measure_category_type"
+        ],
+        "type": "object",
+        "properties": {
+          "reported_measure_category_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code representing the ReportedMeasureCategory."
+          },
+          "reported_measure_category_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The display text for the ReportedMeasureCategory."
+          },
+          "reported_measure_category_type": {
+            "$ref": "#/components/schemas/ReportedMeasureCategoryTypeModel"
+          }
+        },
+        "additionalProperties": false,
+        "description": "A ReportedMeasureCategory provides the method for the disaggregation of a particular Measure and also allows grouping of ReportedMeasures."
+      },
+      "ReportedMeasureCategoryTypeModel": {
+        "required": [
+          "reported_measure_category_type_code",
+          "reported_measure_category_type_name"
+        ],
+        "type": "object",
+        "properties": {
+          "reported_measure_category_type_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the corresponding ReportedMeasureCategoryType."
+          },
+          "reported_measure_category_type_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the corresponding ReportedMeasureCategoryType."
+          }
+        },
+        "additionalProperties": false,
+        "description": "The reported measure category type model."
+      },
+      "ReportedMeasureModel": {
+        "required": [
+          "measure",
+          "meta_tags",
+          "reported_measure_categories",
+          "reported_measure_code",
+          "reported_measure_name"
+        ],
+        "type": "object",
+        "properties": {
+          "measure": {
+            "$ref": "#/components/schemas/MeasureModel"
+          },
+          "meta_tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MetaTagModel"
+            },
+            "description": "List of MetaTags applicable to this Measure. This list will be empty if there are no MetaTags."
+          },
+          "reported_measure_categories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReportedMeasureCategoryModel"
+            },
+            "description": "List of ReportedMeasureCategories applicable to this ReportedMeasure."
+          },
+          "reported_measure_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the corresponding ReportedMeasure."
+          },
+          "reported_measure_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the corresponding ReportedMeasure."
+          }
+        },
+        "additionalProperties": false,
+        "description": "A ReportedMeasure is a disaggregation of a particular Measure. This disaggregation is indicated by 1 or more ReportedMeasureCategories."
+      },
+      "ReportedMeasureSummaryModel": {
+        "required": [
+          "measure_summary",
+          "reported_measure_code",
+          "reported_measure_name"
+        ],
+        "type": "object",
+        "properties": {
+          "measure_summary": {
+            "$ref": "#/components/schemas/MeasureSummaryModel"
+          },
+          "reported_measure_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the corresponding ReportedMeasure."
+          },
+          "reported_measure_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the corresponding ReportedMeasure."
+          }
+        },
+        "additionalProperties": false,
+        "description": "A ReportedMeasureSummary details the code and name of a ReportedMeasure, including a summary of the associated Measure."
+      },
+      "ReportingUnitModel": {
+        "required": [
+          "alternative_names",
+          "closed",
+          "mapped_reporting_units",
+          "meta_tags",
+          "private",
+          "reporting_unit_code",
+          "reporting_unit_name",
+          "reporting_unit_type"
+        ],
+        "type": "object",
+        "properties": {
+          "alternative_names": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The list of alternate names for this ReportingUnit. If there are no alternate names then this list will be empty.",
+            "readOnly": true
+          },
+          "closed": {
+            "type": "boolean",
+            "description": "Indicates whether this ReportingUnit is closed."
+          },
+          "private": {
+            "type": "boolean",
+            "description": "Indicates whether this ReportingUnit is private, e.g. a private hospital."
+          },
+          "latitude": {
+            "type": "number",
+            "description": "The latitude for the ReportingUnit. This field may be null if no geographical point is applicable for the ReportingUnit.",
+            "format": "double",
+            "nullable": true
+          },
+          "longitude": {
+            "type": "number",
+            "description": "The longitude for the ReportingUnit. This field may be null if no geographical point is applicable for the ReportingUnit.",
+            "format": "double",
+            "nullable": true
+          },
+          "mapped_reporting_units": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MappedReportingUnitModel"
+            },
+            "description": "List of mapped ReportingUnits applicable to this ReportingUnit. This list will be empty if there are no mappings.",
+            "readOnly": true
+          },
+          "meta_tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MetaTagModel"
+            },
+            "description": "List of MetaTags applicable to this Measure. This list will be empty if there are no MetaTags."
+          },
+          "reporting_unit_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the corresponding ReportingUnit."
+          },
+          "reporting_unit_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the corresponding ReportingUnit."
+          },
+          "reporting_unit_type": {
+            "$ref": "#/components/schemas/ReportingUnitTypeModel"
+          }
+        },
+        "additionalProperties": false,
+        "description": "A ReportingUnit indicates what unit of analysis a specific data value corresponds to (often a geographical or otherwise bordered area)."
+      },
+      "ReportingUnitSummaryModel": {
+        "required": [
+          "reporting_unit_code",
+          "reporting_unit_name",
+          "reporting_unit_type"
+        ],
+        "type": "object",
+        "properties": {
+          "reporting_unit_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the corresponding ReportingUnit."
+          },
+          "reporting_unit_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the corresponding ReportingUnit."
+          },
+          "reporting_unit_type": {
+            "$ref": "#/components/schemas/ReportingUnitTypeModel"
+          }
+        },
+        "additionalProperties": false,
+        "description": "A ReportingUnitSummary details the code and name of a ReportingUnit, including a summary of the associated ReportingUnitType."
+      },
+      "ReportingUnitTypeModel": {
+        "required": [
+          "reporting_unit_type_code",
+          "reporting_unit_type_name"
+        ],
+        "type": "object",
+        "properties": {
+          "reporting_unit_type_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the corresponding ReportingUnitType."
+          },
+          "reporting_unit_type_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the corresponding ReportingUnitType."
+          }
+        },
+        "additionalProperties": false,
+        "description": "A ReportingUnitType indicates the type for a ReportingUnit and is used to group ReportingUnits."
+      },
+      "SuppressionModel": {
+        "required": [
+          "suppression_code",
+          "suppression_name"
+        ],
+        "type": "object",
+        "properties": {
+          "suppression_code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The code for the corresponding Suppression."
+          },
+          "suppression_display_value": {
+            "type": "string",
+            "description": "The display value or symbol for the corresponding Suppression. If the Suppression has no symbol then this field will be null.",
+            "nullable": true
+          },
+          "suppression_footnote": {
+            "type": "string",
+            "description": "The footnote/explanation text for the corresponding Suppression. If the Suppression has no text then this field will be null.",
+            "nullable": true
+          },
+          "suppression_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the corresponding Suppression."
+          }
+        },
+        "additionalProperties": false,
+        "description": "A Suppression is a footnote or caveat used to apply to, or instead of, a data value. This is now obsolete and has been replaced by the CaveatModel."
+      },
+      "UnitsModel": {
+        "required": [
+          "decimal_places",
+          "units_are_prefix",
+          "units_name"
+        ],
+        "type": "object",
+        "properties": {
+          "decimal_places": {
+            "type": "integer",
+            "description": "The number of decimal places that the data can be expressed to.",
+            "format": "int32"
+          },
+          "units_are_prefix": {
+            "type": "boolean",
+            "description": "Whether the units should be applied as a prefix or suffix to the data value. e.g. $ (prefix) and % (suffix)."
+          },
+          "units_display": {
+            "type": "string",
+            "description": "The display symbol or text for the units. For units without a symbol this will be null.",
+            "nullable": true
+          },
+          "units_name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The name for the corresponding Units."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Units indicates how data values for a Measure should be expressed."
+      }
+    }
+  }
+}
