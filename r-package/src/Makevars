@@ -13,6 +13,9 @@ $(STATLIB):
 	# In some environments, ~/.cargo/bin might not be included in PATH, so we need
 	# to set it here to ensure cargo can be invoked. It is appended to PATH and
 	# therefore takes lower precedence than any user-set configuration.
+	export PATH="$(PATH):$(HOME)/.cargo/bin" && \
+		echo "using rustc:" && rustc --version && \
+		echo "using cargo:" && cargo --version
 	if [ "$(NOT_CRAN)" != "true" ]; then \
 		export CARGO_HOME=$(CARGOTMP); \
 	fi && \
