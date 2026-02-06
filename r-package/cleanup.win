@@ -7,6 +7,9 @@ cd src
 REM Remove Rust target directory (compiled artifacts)
 if exist rust\target rmdir /s /q rust\target
 
+REM Remove extracted vendor directory (from vendor.tar.xz during build)
+if exist rust\vendor rmdir /s /q rust\vendor
+
 REM Remove temporary cargo home directory (used during CRAN builds)
 if exist .cargo rmdir /s /q .cargo
 

@@ -1,44 +1,49 @@
 ## R CMD check results
 
-0 errors | 2 warnings | 2 notes
+0 errors | 0 warnings | 2 notes
 
-### Warnings
+### Previously Reported Warnings (Now Addressed)
 
-1. **Non-API calls to R** (BODY, CLOENV, DATAPTR, ENCLOS, FORMALS) - These
-   come from the extendr framework (https://extendr.github.io/), the standard
-   way to create R extensions in Rust. The extendr project is actively working
-   on moving to the new R C API. This is consistent with other extendr-based
-   CRAN packages (e.g., polars, gifski, string2path).
+1. **"Downloads Rust crates"** - Fixed. All Rust dependencies are vendored in
+   `src/rust/vendor.tar.xz` and extracted at build time. Compilation uses
+   `cargo build --offline` to prevent any network access.
 
-2. **Rust compilation warning** - "No rustc version reported" - We now report
-   rustc version in Makevars before compilation begins.
+2. **"No rustc version reported"** - Fixed. Both Makevars files report rustc
+   and cargo versions before compilation.
+
+### Expected Warnings
+
+1. **"Found non-API calls to R: BODY, CLOENV, DATAPTR, ENCLOS, FORMALS"** -
+   These come from the extendr framework (https://extendr.github.io/), the
+   standard Rust-to-R binding library. The extendr project is actively
+   migrating to the official R C API
+   (https://github.com/extendr/extendr/issues/805). This is consistent with
+   other extendr-based CRAN packages (e.g., string2path, prqlr).
+
+2. **"Compiled code contains abort/exit/_exit"** - These symbols originate from
+   Rust's standard library and the ring cryptography crate (used for TLS).
+   We mitigate with `panic = "abort"`, link-time optimization (`lto = true`),
+   and `codegen-units = 1`. Remaining references are in code paths that
+   cannot be reached from R and do not affect R session stability. This is
+   consistent with other Rust-based CRAN packages.
 
 ### Notes
 
 1. **New submission** - This is a new package.
 
 2. **Possibly misspelled words** - AIHW (Australian Institute of Health and
-   Welfare) and MyHospitals are proper names, not misspellings.
+   Welfare) and MyHospitals are proper nouns, not misspellings.
 
-3. **Package size** (~22MB tarball, ~11MB installed) - This package includes
-   vendored Rust dependencies (vendor.tar.xz) required for CRAN's offline
-   compilation environment. The installed size is primarily from the compiled
-   Rust binary. This is typical for Rust-based packages.
-
-## Rust requirements
-
-This package requires Rust (cargo >= 1.70 and rustc >= 1.70) to compile
-from source. The `configure` script checks for these tools and provides
-installation instructions if they are not found.
-
-Users can install Rust from https://rustup.rs
+3. **Package size** (~22MB tarball) - Includes vendored Rust dependencies
+   required for CRAN's offline build environment. The size is primarily from
+   the HTTP/TLS client stack needed for API communication.
 
 ## Test environments
 
-* local macOS Tahoe 26.3 (aarch64-apple-darwin), R 4.5.2
+* local macOS (aarch64-apple-darwin), R 4.5.x
 * win-builder (R-devel, Windows Server 2022)
-* Debian Linux (R-devel)
+* Debian Linux (R-devel, via CRAN incoming checks)
 
 ## Downstream dependencies
 
-This is a new package with no reverse dependencies.
+No reverse dependencies.

@@ -9,6 +9,11 @@ if [ -d "rust/target" ]; then
   rm -rf rust/target
 fi
 
+# Remove extracted vendor directory (from vendor.tar.xz during build)
+if [ -d "rust/vendor" ]; then
+  rm -rf rust/vendor
+fi
+
 # Remove temporary cargo home directory (used during CRAN builds)
 if [ -d ".cargo" ]; then
   rm -rf .cargo
