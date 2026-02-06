@@ -57,4 +57,4 @@ jobs:
       - uses: r-lib/actions/check-r-package@v2
         with:
           working-directory: r-package
-          args: '"--no-manual", "--as-cran"'
+          args: 'c("--no-manual", "--as-cran")'
