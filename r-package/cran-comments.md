@@ -20,13 +20,6 @@
    (https://github.com/extendr/extendr/issues/805). This is consistent with
    other extendr-based CRAN packages (e.g., string2path, prqlr).
 
-2. **"Compiled code contains abort/exit/_exit"** - These symbols originate from
-   Rust's standard library and the ring cryptography crate (used for TLS).
-   We mitigate with `panic = "abort"`, link-time optimization (`lto = true`),
-   and `codegen-units = 1`. Remaining references are in code paths that
-   cannot be reached from R and do not affect R session stability. This is
-   consistent with other Rust-based CRAN packages.
-
 ### Notes
 
 1. **New submission** - This is a new package.
