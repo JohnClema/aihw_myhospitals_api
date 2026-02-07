@@ -12,6 +12,18 @@ on:
       - 'r-package/**'
       - '.github/workflows/R-CMD-check.yaml'
   workflow_dispatch:
+  workflow_call:
+    inputs:
+      error-on:
+        description: 'R CMD check error threshold'
+        required: false
+        type: string
+        default: '"error"'
+      ubuntu-only:
+        description: 'Run only on ubuntu-latest with R release'
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -24,11 +36,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        config:
-          - {os: windows-latest, r: 'devel'}
-          - {os: ubuntu-latest, r: 'devel'}
-          - {os: ubuntu-latest, r: 'release'}
-          - {os: macos-latest, r: 'release'}
+        config: ${{ fromJSON(
+          inputs.ubuntu-only == true
+            && '[{"os":"ubuntu-latest","r":"release"}]'
+            || '[{"os":"windows-latest","r":"devel"},{"os":"ubuntu-latest","r":"devel"},{"os":"ubuntu-latest","r":"release"},{"os":"macos-latest","r":"release"}]'
+          ) }}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -58,4 +70,4 @@ jobs:
         with:
           working-directory: r-package
           args: 'c("--no-manual", "--as-cran")'
-          error-on: '"error"'
+          error-on: ${{ inputs.error-on || '"error"' }}

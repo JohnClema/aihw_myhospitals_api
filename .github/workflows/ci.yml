@@ -3,8 +3,17 @@ name: CI
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'r-package/**'
+      - '.github/workflows/R-CMD-check.yaml'
+      - '.github/workflows/cran-submit.yaml'
   pull_request:
     branches: [main]
+    paths-ignore:
+      - 'r-package/**'
+      - '.github/workflows/R-CMD-check.yaml'
+      - '.github/workflows/cran-submit.yaml'
+  workflow_call:
 
 env:
   CARGO_TERM_COLOR: always
