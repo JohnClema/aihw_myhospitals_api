@@ -1,0 +1,12 @@
+# Default owner for everything
+* @JohnClema
+
+# R package
+r-package/ @JohnClema
+
+# Rust crate
+src/ @JohnClema
+Cargo.toml @JohnClema
+
+# CI/CD
+.github/ @JohnClema

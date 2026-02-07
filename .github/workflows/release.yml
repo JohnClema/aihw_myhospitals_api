@@ -11,12 +11,18 @@ env:
 jobs:
   # Run full CI before releasing
   ci:
-    name: CI
+    name: Rust CI
     uses: ./.github/workflows/ci.yml
+
+  r-check:
+    name: R CMD check
+    uses: ./.github/workflows/R-CMD-check.yaml
+    with:
+      ubuntu-only: true
 
   publish:
     name: Publish to crates.io
-    needs: ci
+    needs: [ci, r-check]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
