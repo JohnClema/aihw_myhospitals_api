@@ -58,3 +58,4 @@ jobs:
         with:
           working-directory: r-package
           args: 'c("--no-manual", "--as-cran")'
+          error-on: '"error"'

@@ -39,7 +39,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Note: The result is a HashMap<String, Vec<DatasheetConfigurationSummaryModel>>
     println!("--- Measure Downloads ---\n");
 
-    let measure_downloads = client.get_measure_downloads_measure_download_codes().send().await?;
+    let measure_downloads = client
+        .get_measure_downloads_measure_download_codes()
+        .send()
+        .await?;
     println!(
         "Found {} measure download categories:\n",
         measure_downloads.result.len()
@@ -57,7 +60,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Get available datasheet downloads for reporting units
     println!("--- Reporting Unit Datasheet Downloads ---\n");
 
-    let datasheet_codes = client.get_reporting_units_downloads_datasheet_codes().send().await?;
+    let datasheet_codes = client
+        .get_reporting_units_downloads_datasheet_codes()
+        .send()
+        .await?;
     println!(
         "Found {} datasheet categories:\n",
         datasheet_codes.result.len()

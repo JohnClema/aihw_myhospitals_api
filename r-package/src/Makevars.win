@@ -28,7 +28,6 @@ $(STATLIB):
 	fi && \
 		export CARGO_TARGET_X86_64_PC_WINDOWS_GNU_LINKER="$(RTOOLS43_HOME)/x86_64-w64-mingw32.static.posix/bin/gcc.exe" && \
 		export LIBRARY_PATH="$${LIBRARY_PATH};$(CURDIR)/$(TARGET_DIR)/libgcc_mock" && \
-		export CARGO_PROFILE_RELEASE_LTO=true && \
 		export CARGO_PROFILE_RELEASE_CODEGEN_UNITS=1 && \
 		export CARGO_PROFILE_RELEASE_PANIC=abort && \
 		cargo build --lib --release --manifest-path=./rust/Cargo.toml --target-dir=$(TARGET_DIR) --offline -j 2

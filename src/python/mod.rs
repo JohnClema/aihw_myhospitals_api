@@ -92,11 +92,10 @@ impl PyClient {
     fn get_caveats<'py>(&self, py: Python<'py>) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
-            let response = client
-                .get_caveats()
-                .send()
-                .await
-                .map_err(|e| PyErr::new::<pyo3::exceptions::PyRuntimeError, _>(e.to_string()))?;
+            let response =
+                client.get_caveats().send().await.map_err(|e| {
+                    PyErr::new::<pyo3::exceptions::PyRuntimeError, _>(e.to_string())
+                })?;
             // Extract the inner value which implements Serialize
             let inner = response.into_inner();
             Python::with_gil(|py| to_py_object(py, &inner))
@@ -108,7 +107,11 @@ impl PyClient {
     /// Args:
     ///     caveat_code: The caveat code to retrieve.
     #[pyo3(signature = (caveat_code))]
-    fn get_caveat_by_code<'py>(&self, py: Python<'py>, caveat_code: String) -> PyResult<Bound<'py, PyAny>> {
+    fn get_caveat_by_code<'py>(
+        &self,
+        py: Python<'py>,
+        caveat_code: String,
+    ) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
             let response = client
@@ -126,11 +129,10 @@ impl PyClient {
     fn get_suppressions<'py>(&self, py: Python<'py>) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
-            let response = client
-                .get_suppressions()
-                .send()
-                .await
-                .map_err(|e| PyErr::new::<pyo3::exceptions::PyRuntimeError, _>(e.to_string()))?;
+            let response =
+                client.get_suppressions().send().await.map_err(|e| {
+                    PyErr::new::<pyo3::exceptions::PyRuntimeError, _>(e.to_string())
+                })?;
             let inner = response.into_inner();
             Python::with_gil(|py| to_py_object(py, &inner))
         })
@@ -138,7 +140,11 @@ impl PyClient {
 
     /// Get a specific suppression by code.
     #[pyo3(signature = (suppression_code))]
-    fn get_suppression_by_code<'py>(&self, py: Python<'py>, suppression_code: String) -> PyResult<Bound<'py, PyAny>> {
+    fn get_suppression_by_code<'py>(
+        &self,
+        py: Python<'py>,
+        suppression_code: String,
+    ) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
             let response = client
@@ -184,7 +190,11 @@ impl PyClient {
 
     /// Get a specific dataset by ID.
     #[pyo3(signature = (dataset_id))]
-    fn get_dataset_by_id<'py>(&self, py: Python<'py>, dataset_id: i32) -> PyResult<Bound<'py, PyAny>> {
+    fn get_dataset_by_id<'py>(
+        &self,
+        py: Python<'py>,
+        dataset_id: i32,
+    ) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
             let response = client
@@ -200,7 +210,11 @@ impl PyClient {
 
     /// Get data items for a specific dataset.
     #[pyo3(signature = (dataset_id))]
-    fn get_dataset_data_items<'py>(&self, py: Python<'py>, dataset_id: i32) -> PyResult<Bound<'py, PyAny>> {
+    fn get_dataset_data_items<'py>(
+        &self,
+        py: Python<'py>,
+        dataset_id: i32,
+    ) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
             let response = client
@@ -241,7 +255,11 @@ impl PyClient {
 
     /// Get a specific measure by code.
     #[pyo3(signature = (measure_code))]
-    fn get_measure_by_code<'py>(&self, py: Python<'py>, measure_code: String) -> PyResult<Bound<'py, PyAny>> {
+    fn get_measure_by_code<'py>(
+        &self,
+        py: Python<'py>,
+        measure_code: String,
+    ) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
             let response = client
@@ -257,7 +275,11 @@ impl PyClient {
 
     /// Get data items for a specific measure.
     #[pyo3(signature = (measure_code))]
-    fn get_measure_data_items<'py>(&self, py: Python<'py>, measure_code: String) -> PyResult<Bound<'py, PyAny>> {
+    fn get_measure_data_items<'py>(
+        &self,
+        py: Python<'py>,
+        measure_code: String,
+    ) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
             let response = client
@@ -273,7 +295,11 @@ impl PyClient {
 
     /// Get available reporting units for a specific measure.
     #[pyo3(signature = (measure_code))]
-    fn get_measure_reporting_units_available<'py>(&self, py: Python<'py>, measure_code: String) -> PyResult<Bound<'py, PyAny>> {
+    fn get_measure_reporting_units_available<'py>(
+        &self,
+        py: Python<'py>,
+        measure_code: String,
+    ) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
             let response = client
@@ -291,11 +317,10 @@ impl PyClient {
     fn get_measure_categories<'py>(&self, py: Python<'py>) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
-            let response = client
-                .get_measure_categories()
-                .send()
-                .await
-                .map_err(|e| PyErr::new::<pyo3::exceptions::PyRuntimeError, _>(e.to_string()))?;
+            let response =
+                client.get_measure_categories().send().await.map_err(|e| {
+                    PyErr::new::<pyo3::exceptions::PyRuntimeError, _>(e.to_string())
+                })?;
             let inner = response.into_inner();
             Python::with_gil(|py| to_py_object(py, &inner))
         })
@@ -303,7 +328,11 @@ impl PyClient {
 
     /// Get a specific measure category by code.
     #[pyo3(signature = (measure_category_code))]
-    fn get_measure_category_by_code<'py>(&self, py: Python<'py>, measure_category_code: String) -> PyResult<Bound<'py, PyAny>> {
+    fn get_measure_category_by_code<'py>(
+        &self,
+        py: Python<'py>,
+        measure_category_code: String,
+    ) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
             let response = client
@@ -319,7 +348,11 @@ impl PyClient {
 
     /// Get measures in a specific category.
     #[pyo3(signature = (measure_category_code))]
-    fn get_measure_category_measures<'py>(&self, py: Python<'py>, measure_category_code: String) -> PyResult<Bound<'py, PyAny>> {
+    fn get_measure_category_measures<'py>(
+        &self,
+        py: Python<'py>,
+        measure_category_code: String,
+    ) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
             let response = client
@@ -357,7 +390,11 @@ impl PyClient {
 
     /// Get a specific reported measure by code.
     #[pyo3(signature = (reported_measure_code))]
-    fn get_reported_measure_by_code<'py>(&self, py: Python<'py>, reported_measure_code: String) -> PyResult<Bound<'py, PyAny>> {
+    fn get_reported_measure_by_code<'py>(
+        &self,
+        py: Python<'py>,
+        reported_measure_code: String,
+    ) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
             let response = client
@@ -373,7 +410,11 @@ impl PyClient {
 
     /// Get data items for a specific reported measure.
     #[pyo3(signature = (reported_measure_code))]
-    fn get_reported_measure_data_items<'py>(&self, py: Python<'py>, reported_measure_code: String) -> PyResult<Bound<'py, PyAny>> {
+    fn get_reported_measure_data_items<'py>(
+        &self,
+        py: Python<'py>,
+        reported_measure_code: String,
+    ) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
             let response = client
@@ -403,7 +444,11 @@ impl PyClient {
 
     /// Get a specific reported measure category by code.
     #[pyo3(signature = (reported_measure_category_code))]
-    fn get_reported_measure_category_by_code<'py>(&self, py: Python<'py>, reported_measure_category_code: String) -> PyResult<Bound<'py, PyAny>> {
+    fn get_reported_measure_category_by_code<'py>(
+        &self,
+        py: Python<'py>,
+        reported_measure_category_code: String,
+    ) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
             let response = client
@@ -419,7 +464,11 @@ impl PyClient {
 
     /// Get reported measures in a specific category.
     #[pyo3(signature = (reported_measure_category_code))]
-    fn get_reported_measure_category_reported_measures<'py>(&self, py: Python<'py>, reported_measure_category_code: String) -> PyResult<Bound<'py, PyAny>> {
+    fn get_reported_measure_category_reported_measures<'py>(
+        &self,
+        py: Python<'py>,
+        reported_measure_category_code: String,
+    ) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
             let response = client
@@ -460,7 +509,11 @@ impl PyClient {
 
     /// Get a specific reporting unit by code.
     #[pyo3(signature = (reporting_unit_code))]
-    fn get_reporting_unit_by_code<'py>(&self, py: Python<'py>, reporting_unit_code: String) -> PyResult<Bound<'py, PyAny>> {
+    fn get_reporting_unit_by_code<'py>(
+        &self,
+        py: Python<'py>,
+        reporting_unit_code: String,
+    ) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
             let response = client
@@ -476,7 +529,11 @@ impl PyClient {
 
     /// Get data items for a specific reporting unit.
     #[pyo3(signature = (reporting_unit_code))]
-    fn get_reporting_unit_data_items<'py>(&self, py: Python<'py>, reporting_unit_code: String) -> PyResult<Bound<'py, PyAny>> {
+    fn get_reporting_unit_data_items<'py>(
+        &self,
+        py: Python<'py>,
+        reporting_unit_code: String,
+    ) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
             let response = client
@@ -492,7 +549,11 @@ impl PyClient {
 
     /// Get available measures for a specific reporting unit.
     #[pyo3(signature = (reporting_unit_code))]
-    fn get_reporting_unit_measures_available<'py>(&self, py: Python<'py>, reporting_unit_code: String) -> PyResult<Bound<'py, PyAny>> {
+    fn get_reporting_unit_measures_available<'py>(
+        &self,
+        py: Python<'py>,
+        reporting_unit_code: String,
+    ) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
             let response = client
@@ -508,7 +569,11 @@ impl PyClient {
 
     /// Get available bricks for a specific reporting unit.
     #[pyo3(signature = (reporting_unit_code))]
-    fn get_reporting_unit_bricks_available<'py>(&self, py: Python<'py>, reporting_unit_code: String) -> PyResult<Bound<'py, PyAny>> {
+    fn get_reporting_unit_bricks_available<'py>(
+        &self,
+        py: Python<'py>,
+        reporting_unit_code: String,
+    ) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
             let response = client
@@ -538,7 +603,11 @@ impl PyClient {
 
     /// Get a specific reporting unit type by code.
     #[pyo3(signature = (reporting_unit_type_code))]
-    fn get_reporting_unit_type_by_code<'py>(&self, py: Python<'py>, reporting_unit_type_code: String) -> PyResult<Bound<'py, PyAny>> {
+    fn get_reporting_unit_type_by_code<'py>(
+        &self,
+        py: Python<'py>,
+        reporting_unit_type_code: String,
+    ) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
             let response = client
@@ -554,7 +623,11 @@ impl PyClient {
 
     /// Get available bricks for a specific reporting unit type.
     #[pyo3(signature = (reporting_unit_type_code))]
-    fn get_reporting_unit_type_bricks_available<'py>(&self, py: Python<'py>, reporting_unit_type_code: String) -> PyResult<Bound<'py, PyAny>> {
+    fn get_reporting_unit_type_bricks_available<'py>(
+        &self,
+        py: Python<'py>,
+        reporting_unit_type_code: String,
+    ) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
             let response = client
@@ -581,6 +654,7 @@ impl PyClient {
     ///     reporting_unit_code: Optional filter by reporting unit codes.
     ///     start_date: Optional start date filter (ISO format).
     ///     end_date: Optional end date filter (ISO format).
+    #[allow(clippy::too_many_arguments)]
     #[pyo3(signature = (measure_category_code, skip=0, top=100, reporting_unit_type_code=None, measure_code=None, reporting_unit_code=None, start_date=None, end_date=None))]
     fn get_flat_data_extract<'py>(
         &self,
@@ -596,8 +670,9 @@ impl PyClient {
     ) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
-            let top_nonzero = std::num::NonZeroU32::new(top.max(1))
-                .ok_or_else(|| PyErr::new::<pyo3::exceptions::PyValueError, _>("top must be > 0"))?;
+            let top_nonzero = std::num::NonZeroU32::new(top.max(1)).ok_or_else(|| {
+                PyErr::new::<pyo3::exceptions::PyValueError, _>("top must be > 0")
+            })?;
 
             let mut builder = client
                 .get_flat_data_extract_by_measure_category_code()
@@ -643,6 +718,7 @@ impl PyClient {
     ///     reporting_unit_code: Optional filter by reporting unit codes.
     ///     start_date: Optional start date filter (ISO format).
     ///     end_date: Optional end date filter (ISO format).
+    #[allow(clippy::too_many_arguments)]
     #[pyo3(signature = (measure_category_code, skip=0, top=100, reporting_unit_type_code=None, measure_code=None, reporting_unit_code=None, start_date=None, end_date=None))]
     fn get_flat_formatted_data_extract<'py>(
         &self,
@@ -658,8 +734,9 @@ impl PyClient {
     ) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
-            let top_nonzero = std::num::NonZeroU32::new(top.max(1))
-                .ok_or_else(|| PyErr::new::<pyo3::exceptions::PyValueError, _>("top must be > 0"))?;
+            let top_nonzero = std::num::NonZeroU32::new(top.max(1)).ok_or_else(|| {
+                PyErr::new::<pyo3::exceptions::PyValueError, _>("top must be > 0")
+            })?;
 
             let mut builder = client
                 .get_flat_formatted_data_extract_by_measure_category_code()
@@ -710,7 +787,11 @@ impl PyClient {
     ///
     /// Returns the file contents as bytes.
     #[pyo3(signature = (download_code))]
-    fn download_simple<'py>(&self, py: Python<'py>, download_code: String) -> PyResult<Bound<'py, PyAny>> {
+    fn download_simple<'py>(
+        &self,
+        py: Python<'py>,
+        download_code: String,
+    ) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
             use futures::StreamExt;
@@ -725,13 +806,13 @@ impl PyClient {
             let mut bytes = Vec::new();
             let mut stream = response.into_inner();
             while let Some(chunk) = stream.next().await {
-                let chunk = chunk.map_err(|e| PyErr::new::<pyo3::exceptions::PyRuntimeError, _>(e.to_string()))?;
+                let chunk = chunk.map_err(|e| {
+                    PyErr::new::<pyo3::exceptions::PyRuntimeError, _>(e.to_string())
+                })?;
                 bytes.extend_from_slice(&chunk);
             }
 
-            Python::with_gil(|py| {
-                Ok(pyo3::types::PyBytes::new(py, &bytes).unbind().into_any())
-            })
+            Python::with_gil(|py| Ok(pyo3::types::PyBytes::new(py, &bytes).unbind().into_any()))
         })
     }
 
@@ -753,7 +834,11 @@ impl PyClient {
     ///
     /// Returns the file contents as bytes.
     #[pyo3(signature = (measure_download_code))]
-    fn download_measure<'py>(&self, py: Python<'py>, measure_download_code: String) -> PyResult<Bound<'py, PyAny>> {
+    fn download_measure<'py>(
+        &self,
+        py: Python<'py>,
+        measure_download_code: String,
+    ) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
             use futures::StreamExt;
@@ -768,13 +853,13 @@ impl PyClient {
             let mut bytes = Vec::new();
             let mut stream = response.into_inner();
             while let Some(chunk) = stream.next().await {
-                let chunk = chunk.map_err(|e| PyErr::new::<pyo3::exceptions::PyRuntimeError, _>(e.to_string()))?;
+                let chunk = chunk.map_err(|e| {
+                    PyErr::new::<pyo3::exceptions::PyRuntimeError, _>(e.to_string())
+                })?;
                 bytes.extend_from_slice(&chunk);
             }
 
-            Python::with_gil(|py| {
-                Ok(pyo3::types::PyBytes::new(py, &bytes).unbind().into_any())
-            })
+            Python::with_gil(|py| Ok(pyo3::types::PyBytes::new(py, &bytes).unbind().into_any()))
         })
     }
 
@@ -782,7 +867,11 @@ impl PyClient {
     ///
     /// Returns the file contents as bytes.
     #[pyo3(signature = (measure_download_code))]
-    fn download_measure_across_reporting_units<'py>(&self, py: Python<'py>, measure_download_code: String) -> PyResult<Bound<'py, PyAny>> {
+    fn download_measure_across_reporting_units<'py>(
+        &self,
+        py: Python<'py>,
+        measure_download_code: String,
+    ) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
             use futures::StreamExt;
@@ -797,18 +886,21 @@ impl PyClient {
             let mut bytes = Vec::new();
             let mut stream = response.into_inner();
             while let Some(chunk) = stream.next().await {
-                let chunk = chunk.map_err(|e| PyErr::new::<pyo3::exceptions::PyRuntimeError, _>(e.to_string()))?;
+                let chunk = chunk.map_err(|e| {
+                    PyErr::new::<pyo3::exceptions::PyRuntimeError, _>(e.to_string())
+                })?;
                 bytes.extend_from_slice(&chunk);
             }
 
-            Python::with_gil(|py| {
-                Ok(pyo3::types::PyBytes::new(py, &bytes).unbind().into_any())
-            })
+            Python::with_gil(|py| Ok(pyo3::types::PyBytes::new(py, &bytes).unbind().into_any()))
         })
     }
 
     /// Get available reporting unit datasheet codes.
-    fn get_reporting_unit_datasheet_codes<'py>(&self, py: Python<'py>) -> PyResult<Bound<'py, PyAny>> {
+    fn get_reporting_unit_datasheet_codes<'py>(
+        &self,
+        py: Python<'py>,
+    ) -> PyResult<Bound<'py, PyAny>> {
         let client = self.client.clone();
         future_into_py(py, async move {
             let response = client
@@ -846,13 +938,13 @@ impl PyClient {
             let mut bytes = Vec::new();
             let mut stream = response.into_inner();
             while let Some(chunk) = stream.next().await {
-                let chunk = chunk.map_err(|e| PyErr::new::<pyo3::exceptions::PyRuntimeError, _>(e.to_string()))?;
+                let chunk = chunk.map_err(|e| {
+                    PyErr::new::<pyo3::exceptions::PyRuntimeError, _>(e.to_string())
+                })?;
                 bytes.extend_from_slice(&chunk);
             }
 
-            Python::with_gil(|py| {
-                Ok(pyo3::types::PyBytes::new(py, &bytes).unbind().into_any())
-            })
+            Python::with_gil(|py| Ok(pyo3::types::PyBytes::new(py, &bytes).unbind().into_any()))
         })
     }
 }

@@ -103,9 +103,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .send()
             .await?;
 
-        println!("Available at {} reporting units (showing first 5):", units.result.len());
+        println!(
+            "Available at {} reporting units (showing first 5):",
+            units.result.len()
+        );
         for unit in units.result.iter().take(5) {
-            println!("  - {}: {}", *unit.reporting_unit_code, *unit.reporting_unit_name);
+            println!(
+                "  - {}: {}",
+                *unit.reporting_unit_code, *unit.reporting_unit_name
+            );
         }
     }
 
@@ -113,7 +119,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Get reported measure categories
     let response = client.get_reported_measure_categories().send().await?;
-    println!("Found {} reported measure categories:\n", response.result.len());
+    println!(
+        "Found {} reported measure categories:\n",
+        response.result.len()
+    );
 
     for cat in response.result.iter().take(3) {
         println!("Code: {}", *cat.reported_measure_category_code);
@@ -134,7 +143,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         println!("Found {} reported measures:", measures.result.len());
         for m in measures.result.iter().take(5) {
-            println!("  - {}: {}", *m.reported_measure_code, *m.reported_measure_name);
+            println!(
+                "  - {}: {}",
+                *m.reported_measure_code, *m.reported_measure_name
+            );
         }
     }
 

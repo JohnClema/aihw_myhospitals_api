@@ -29,13 +29,14 @@ fn main() {
         )
     });
 
-    let mut spec_json: serde_json::Value = serde_json::from_str(&spec_content).unwrap_or_else(|e| {
-        panic!(
-            "Failed to parse OpenAPI spec as JSON: {}\n\
+    let mut spec_json: serde_json::Value =
+        serde_json::from_str(&spec_content).unwrap_or_else(|e| {
+            panic!(
+                "Failed to parse OpenAPI spec as JSON: {}\n\
              Hint: The spec file may be corrupted or invalid.",
-            e
-        )
-    });
+                e
+            )
+        });
 
     // Fix date-time formats to date for known date fields
     fix_date_formats(&mut spec_json);
@@ -103,9 +104,8 @@ fn main() {
 
     // Write generated code
     let out_path = Path::new(&out_dir).join("codegen.rs");
-    fs::write(&out_path, formatted_code).unwrap_or_else(|e| {
-        panic!("Failed to write generated code to {:?}: {}", out_path, e)
-    });
+    fs::write(&out_path, formatted_code)
+        .unwrap_or_else(|e| panic!("Failed to write generated code to {:?}: {}", out_path, e));
 
     if debug {
         println!("cargo:warning=Generated API client at {:?}", out_path);
@@ -129,8 +129,14 @@ fn main() {
 ///
 /// This schema is not documented in the OpenAPI spec, so we add it manually.
 fn add_version_information_schema(spec_json: &mut serde_json::Value) {
-    if let Some(components) = spec_json.get_mut("components").and_then(|c| c.as_object_mut()) {
-        if let Some(schemas) = components.get_mut("schemas").and_then(|s| s.as_object_mut()) {
+    if let Some(components) = spec_json
+        .get_mut("components")
+        .and_then(|c| c.as_object_mut())
+    {
+        if let Some(schemas) = components
+            .get_mut("schemas")
+            .and_then(|s| s.as_object_mut())
+        {
             if !schemas.contains_key("VersionInformation") {
                 schemas.insert(
                     "VersionInformation".to_string(),
@@ -176,7 +182,9 @@ fn process_paths(spec_json: &mut serde_json::Value) {
             }
 
             // Process responses
-            let Some(responses) = operation.get_mut("responses").and_then(|r| r.as_object_mut())
+            let Some(responses) = operation
+                .get_mut("responses")
+                .and_then(|r| r.as_object_mut())
             else {
                 continue;
             };
@@ -208,8 +216,9 @@ fn process_paths(spec_json: &mut serde_json::Value) {
                 };
 
                 // Check if this is an Excel download endpoint
-                let has_excel = content
-                    .contains_key("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                let has_excel = content.contains_key(
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                );
 
                 if has_excel {
                     // Convert Excel content type to application/octet-stream

@@ -22,7 +22,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     if let Some(category) = categories.result.first() {
         let code = &*category.measure_category_code;
-        println!("Using category: {} ({})\n", *category.measure_category_name, code);
+        println!(
+            "Using category: {} ({})\n",
+            *category.measure_category_name, code
+        );
 
         // Get flat data extract (raw numeric values)
         // Parameters: skip (offset), top (limit, 1-1000)
@@ -58,16 +61,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .await?;
 
         if let Some(data) = &formatted.result.data {
-            println!("Retrieved {} formatted data items (showing first 5):", data.len());
+            println!(
+                "Retrieved {} formatted data items (showing first 5):",
+                data.len()
+            );
             for item in data.iter().take(5) {
                 println!(
                     "  - Measure: {}, Unit: {}",
                     *item.measure_code, *item.reporting_unit_code
                 );
-                println!(
-                    "    Formatted Value: {:?}",
-                    item.formatted_value
-                );
+                println!("    Formatted Value: {:?}", item.formatted_value);
             }
         }
 
@@ -107,7 +110,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         // Demonstrate filtering options
         println!("\n--- Filtering Options ---\n");
         println!("The API supports filtering by:");
-        println!("  - reporting_unit_type_code: Filter by unit type (H=Hospital, S=State, N=National)");
+        println!(
+            "  - reporting_unit_type_code: Filter by unit type (H=Hospital, S=State, N=National)"
+        );
         println!("  - measure_code: Filter by specific measures");
         println!("  - reporting_unit_code: Filter by specific reporting units");
         println!("  - start_date / end_date: Filter by date range");

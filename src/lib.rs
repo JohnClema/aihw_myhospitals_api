@@ -105,7 +105,6 @@ mod generated {
     include!(concat!(env!("OUT_DIR"), "/codegen.rs"));
 }
 
-#[warn(missing_docs)]
 pub use generated::*;
 
 // Python bindings (only compiled with the "python" feature)
@@ -174,14 +173,20 @@ mod integration_tests {
     async fn test_get_measure_categories() {
         let client = new_client();
         let response = client.get_measure_categories().send().await.unwrap();
-        assert!(!response.result.is_empty(), "Should have at least one measure category");
+        assert!(
+            !response.result.is_empty(),
+            "Should have at least one measure category"
+        );
     }
 
     #[tokio::test]
     async fn test_get_reporting_unit_types() {
         let client = new_client();
         let response = client.get_reporting_unit_types().send().await.unwrap();
-        assert!(!response.result.is_empty(), "Should have at least one reporting unit type");
+        assert!(
+            !response.result.is_empty(),
+            "Should have at least one reporting unit type"
+        );
 
         // Verify expected types exist
         let type_codes: Vec<&str> = response
@@ -197,9 +202,15 @@ mod integration_tests {
     async fn test_get_datasets() {
         let client = new_client();
         let response = client.get_datasets().send().await.unwrap();
-        assert!(!response.result.is_empty(), "Should have at least one dataset");
+        assert!(
+            !response.result.is_empty(),
+            "Should have at least one dataset"
+        );
 
         // Verify version information is present
-        assert!(response.version_information.is_some(), "Should have version information");
+        assert!(
+            response.version_information.is_some(),
+            "Should have version information"
+        );
     }
 }

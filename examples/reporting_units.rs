@@ -63,7 +63,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     for unit in response.result.iter().take(5) {
         println!("Code: {}", *unit.reporting_unit_code);
         println!("Name: {}", *unit.reporting_unit_name);
-        println!("Type: {}", *unit.reporting_unit_type.reporting_unit_type_code);
+        println!(
+            "Type: {}",
+            *unit.reporting_unit_type.reporting_unit_type_code
+        );
         println!();
     }
 
@@ -84,7 +87,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .await?;
 
         println!("Name: {}", *detail.result.reporting_unit_name);
-        println!("Type: {}", *detail.result.reporting_unit_type.reporting_unit_type_code);
+        println!(
+            "Type: {}",
+            *detail.result.reporting_unit_type.reporting_unit_type_code
+        );
         println!("Private: {}", detail.result.private);
         println!("Closed: {}", detail.result.closed);
         println!("Latitude: {:?}", detail.result.latitude);
@@ -94,7 +100,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         if !detail.result.meta_tags.is_empty() {
             println!("\nMeta tags:");
             for tag in &detail.result.meta_tags {
-                println!("  - {}: {}", *tag.meta_tag_type.meta_tag_type_name, *tag.meta_tag_name);
+                println!(
+                    "  - {}: {}",
+                    *tag.meta_tag_type.meta_tag_type_name, *tag.meta_tag_name
+                );
             }
         }
 

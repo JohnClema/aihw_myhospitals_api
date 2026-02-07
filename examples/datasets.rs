@@ -18,7 +18,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     for dataset in response.result.iter().take(5) {
         println!("ID: {}", dataset.data_set_id);
         println!("Name: {}", *dataset.data_set_name);
-        println!("Period: {} to {}", dataset.reporting_start_date, dataset.reporting_end_date);
+        println!(
+            "Period: {} to {}",
+            dataset.reporting_start_date, dataset.reporting_end_date
+        );
         println!();
     }
 

@@ -37,10 +37,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let response = client.get_datasets().send().await?;
     println!("Found {} datasets. First 3:", response.result.len());
     for ds in response.result.iter().take(3) {
-        println!(
-            "  - ID {}: {:?}",
-            ds.data_set_id, ds.data_set_name
-        );
+        println!("  - ID {}: {:?}", ds.data_set_id, ds.data_set_name);
         println!(
             "    Period: {} to {}",
             ds.reporting_start_date, ds.reporting_end_date
