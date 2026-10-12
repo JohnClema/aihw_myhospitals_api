@@ -1,9 +1,57 @@
 # Tests for aihwmyhospitals client
-# These tests require network access to the AIHW MyHospitals API
+# The integration tests at the end need network access to the AIHW MyHospitals
+# API; the rest run offline.
+
+test_that("MyHospitalsClient is exported", {
+  expect_true("MyHospitalsClient" %in% getNamespaceExports("aihwmyhospitals"))
+})
 
 test_that("client can be created", {
   client <- MyHospitalsClient$new(NULL)
   expect_true(!is.null(client))
+})
+
+test_that("client can be created with no arguments", {
+  client <- MyHospitalsClient$new()
+  expect_s3_class(client, "MyHospitalsClient")
+})
+
+test_that("optional arguments have the documented defaults", {
+  client <- MyHospitalsClient$new()
+
+  # A NULL default, as opposed to no default (the empty symbol).
+  has_null_default <- function(f, arg) {
+    arg %in% names(formals(f)) && is.null(formals(f)[[arg]])
+  }
+
+  expect_true(has_null_default(MyHospitalsClient$new, "base_url"))
+  expect_true(has_null_default(client$get_datasets, "measure_code"))
+  expect_true(has_null_default(client$get_datasets, "reported_measure_code"))
+  expect_true(has_null_default(client$get_measures, "measure_category_code"))
+  expect_true(has_null_default(client$get_reported_measures, "reported_measure_category_code"))
+  expect_true(has_null_default(client$get_reporting_units, "reporting_unit_type_code"))
+
+  for (method in c("get_flat_data_extract", "get_flat_formatted_data_extract")) {
+    f <- client[[method]]
+    expect_identical(formals(f)$skip, 0L)
+    expect_identical(formals(f)$top, 100L)
+    for (arg in c("reporting_unit_type_code", "measure_code", "reporting_unit_code",
+                  "start_date", "end_date")) {
+      expect_true(has_null_default(f, arg), info = paste(method, arg))
+    }
+  }
+})
+
+test_that("methods can be called with their optional arguments omitted", {
+  # These calls fail offline, but only once they reach the request, so the
+  # Rust layer accepted the defaults.
+  client <- unreachable_client()
+  expect_error(client$get_datasets(), class = "myhospitals_error")
+  expect_error(client$get_measures(), class = "myhospitals_error")
+  expect_error(client$get_reported_measures(), class = "myhospitals_error")
+  expect_error(client$get_reporting_units(), class = "myhospitals_error")
+  expect_error(client$get_flat_data_extract("CAT"), class = "myhospitals_error")
+  expect_error(client$get_flat_formatted_data_extract("CAT"), class = "myhospitals_error")
 })
 
 test_that("client can be created with custom URL", {

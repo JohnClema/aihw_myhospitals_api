@@ -10,9 +10,18 @@
 #' @useDynLib aihwmyhospitals, .registration = TRUE
 NULL
 
+#' Whether `client` still points at a Rust client.
+#'
+#' A client restored from disk (`saveRDS()`, a saved workspace) or copied to
+#' another R process holds a NULL pointer. The R methods check this before
+#' calling into Rust (see `R/zzz.R`), because extendr would otherwise raise
+#' its own error from inside Rust, leaking the call's arguments.
+#' @noRd
+client_is_live <- function(client) .Call(wrap__client_is_live, client)
+
 MyHospitalsClient <- new.env(parent = emptyenv())
 
-MyHospitalsClient$new <- function(base_url) .Call(wrap__MyHospitalsClient__new, base_url)
+MyHospitalsClient$new <- function(base_url = NULL) .Call(wrap__MyHospitalsClient__new, base_url)
 
 MyHospitalsClient$get_caveats <- function() .Call(wrap__MyHospitalsClient__get_caveats, self)
 
@@ -22,13 +31,13 @@ MyHospitalsClient$get_suppressions <- function() .Call(wrap__MyHospitalsClient__
 
 MyHospitalsClient$get_suppression_by_code <- function(suppression_code) .Call(wrap__MyHospitalsClient__get_suppression_by_code, self, suppression_code)
 
-MyHospitalsClient$get_datasets <- function(measure_code, reported_measure_code) .Call(wrap__MyHospitalsClient__get_datasets, self, measure_code, reported_measure_code)
+MyHospitalsClient$get_datasets <- function(measure_code = NULL, reported_measure_code = NULL) .Call(wrap__MyHospitalsClient__get_datasets, self, measure_code, reported_measure_code)
 
 MyHospitalsClient$get_dataset_by_id <- function(dataset_id) .Call(wrap__MyHospitalsClient__get_dataset_by_id, self, dataset_id)
 
 MyHospitalsClient$get_dataset_data_items <- function(dataset_id) .Call(wrap__MyHospitalsClient__get_dataset_data_items, self, dataset_id)
 
-MyHospitalsClient$get_measures <- function(measure_category_code) .Call(wrap__MyHospitalsClient__get_measures, self, measure_category_code)
+MyHospitalsClient$get_measures <- function(measure_category_code = NULL) .Call(wrap__MyHospitalsClient__get_measures, self, measure_category_code)
 
 MyHospitalsClient$get_measure_by_code <- function(measure_code) .Call(wrap__MyHospitalsClient__get_measure_by_code, self, measure_code)
 
@@ -42,7 +51,7 @@ MyHospitalsClient$get_measure_category_by_code <- function(measure_category_code
 
 MyHospitalsClient$get_measure_category_measures <- function(measure_category_code) .Call(wrap__MyHospitalsClient__get_measure_category_measures, self, measure_category_code)
 
-MyHospitalsClient$get_reported_measures <- function(reported_measure_category_code) .Call(wrap__MyHospitalsClient__get_reported_measures, self, reported_measure_category_code)
+MyHospitalsClient$get_reported_measures <- function(reported_measure_category_code = NULL) .Call(wrap__MyHospitalsClient__get_reported_measures, self, reported_measure_category_code)
 
 MyHospitalsClient$get_reported_measure_by_code <- function(reported_measure_code) .Call(wrap__MyHospitalsClient__get_reported_measure_by_code, self, reported_measure_code)
 
@@ -54,7 +63,7 @@ MyHospitalsClient$get_reported_measure_category_by_code <- function(reported_mea
 
 MyHospitalsClient$get_reported_measure_category_reported_measures <- function(reported_measure_category_code) .Call(wrap__MyHospitalsClient__get_reported_measure_category_reported_measures, self, reported_measure_category_code)
 
-MyHospitalsClient$get_reporting_units <- function(reporting_unit_type_code) .Call(wrap__MyHospitalsClient__get_reporting_units, self, reporting_unit_type_code)
+MyHospitalsClient$get_reporting_units <- function(reporting_unit_type_code = NULL) .Call(wrap__MyHospitalsClient__get_reporting_units, self, reporting_unit_type_code)
 
 MyHospitalsClient$get_reporting_unit_by_code <- function(reporting_unit_code) .Call(wrap__MyHospitalsClient__get_reporting_unit_by_code, self, reporting_unit_code)
 
@@ -70,9 +79,9 @@ MyHospitalsClient$get_reporting_unit_type_by_code <- function(reporting_unit_typ
 
 MyHospitalsClient$get_reporting_unit_type_bricks_available <- function(reporting_unit_type_code) .Call(wrap__MyHospitalsClient__get_reporting_unit_type_bricks_available, self, reporting_unit_type_code)
 
-MyHospitalsClient$get_flat_data_extract <- function(measure_category_code, skip, top, reporting_unit_type_code, measure_code, reporting_unit_code, start_date, end_date) .Call(wrap__MyHospitalsClient__get_flat_data_extract, self, measure_category_code, skip, top, reporting_unit_type_code, measure_code, reporting_unit_code, start_date, end_date)
+MyHospitalsClient$get_flat_data_extract <- function(measure_category_code, skip = 0L, top = 100L, reporting_unit_type_code = NULL, measure_code = NULL, reporting_unit_code = NULL, start_date = NULL, end_date = NULL) .Call(wrap__MyHospitalsClient__get_flat_data_extract, self, measure_category_code, skip, top, reporting_unit_type_code, measure_code, reporting_unit_code, start_date, end_date)
 
-MyHospitalsClient$get_flat_formatted_data_extract <- function(measure_category_code, skip, top, reporting_unit_type_code, measure_code, reporting_unit_code, start_date, end_date) .Call(wrap__MyHospitalsClient__get_flat_formatted_data_extract, self, measure_category_code, skip, top, reporting_unit_type_code, measure_code, reporting_unit_code, start_date, end_date)
+MyHospitalsClient$get_flat_formatted_data_extract <- function(measure_category_code, skip = 0L, top = 100L, reporting_unit_type_code = NULL, measure_code = NULL, reporting_unit_code = NULL, start_date = NULL, end_date = NULL) .Call(wrap__MyHospitalsClient__get_flat_formatted_data_extract, self, measure_category_code, skip, top, reporting_unit_type_code, measure_code, reporting_unit_code, start_date, end_date)
 
 MyHospitalsClient$get_simple_download_codes <- function() .Call(wrap__MyHospitalsClient__get_simple_download_codes, self)
 

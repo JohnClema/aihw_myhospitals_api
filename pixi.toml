@@ -19,7 +19,7 @@ test-python = "pytest tests/test_python.py -v"
 # R tasks
 setup-r = { cmd = "Rscript -e \"install.packages('rextendr', repos='https://cloud.r-project.org')\"", description = "Install rextendr from CRAN (one-time setup)" }
 build-r = { cmd = "R CMD INSTALL --no-multiarch --with-keep.source r-package", description = "Build and install R package locally" }
-test-r = { cmd = "Rscript -e \"testthat::test_dir('r-package/tests/testthat')\"", description = "Run R tests" }
+test-r = { cmd = "Rscript -e \"testthat::test_dir('r-package/tests/testthat', package = 'aihwmyhospitals', load_package = 'installed')\"", description = "Run R tests against the installed package (run build-r first)" }
 check-r = { cmd = "R CMD build r-package && R CMD check --as-cran aihwmyhospitals_*.tar.gz", description = "Build and check R package for CRAN" }
 document-r = { cmd = "Rscript -e \"devtools::document('r-package')\"", description = "Generate R documentation" }
 vendor-r = { cmd = "Rscript -e \"rextendr::vendor_pkgs('r-package')\"", description = "Vendor Rust dependencies for CRAN" }

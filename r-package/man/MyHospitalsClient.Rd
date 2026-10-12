@@ -11,6 +11,19 @@ client object using the \code{$} operator.
 \details{
 R6-style client for the AIHW MyHospitals Data API.
 }
+\section{Errors}{
+
+A failed call (network failure, HTTP error status or unexpected response)
+raises an R error of class \code{myhospitals_error}, which you can catch with
+\code{tryCatch(..., myhospitals_error = function(e) ...)}. The message starts with
+the cause; messages longer than 2,000 characters are truncated.
+
+A client can't be saved and restored (with \code{saveRDS()} or in a saved
+workspace) or copied to another R process: calling a method on such a copy
+raises a \code{myhospitals_error}. Create a new client with
+\code{MyHospitalsClient$new()} instead.
+}
+
 \section{Methods}{
 
 \describe{
