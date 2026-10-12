@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- R: `MyHospitalsClient` is now exported, so `library(aihwmyhospitals)` makes it
+  available as documented.
+- R: optional arguments have their documented defaults (`base_url` and filters
+  default to `NULL`; flat extracts default to `skip = 0L`, `top = 100L`), so
+  calls like `MyHospitalsClient$new()` and `client$get_datasets()` work.
+- R: a failed API call no longer crashes the R session or leaks memory. Errors
+  are raised from R as conditions of class `myhospitals_error`, instead of
+  from Rust with the message used as a printf format (a `%` in a URL or
+  response body could segfault R).
+
 ## [0.1.0] - 2026-02-05
 
 ### Added

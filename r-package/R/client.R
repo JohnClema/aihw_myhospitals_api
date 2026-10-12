@@ -26,6 +26,12 @@
 #' writeBin(bytes, "data.xlsx")
 #' }
 #'
+#' @section Errors:
+#' A failed call (network failure, HTTP error status or unexpected response)
+#' raises an R error of class `myhospitals_error`, which you can catch with
+#' `tryCatch(..., myhospitals_error = function(e) ...)`. Messages longer than
+#' 2,000 characters are truncated.
+#'
 #' @section Methods:
 #' \describe{
 #'   \item{\code{new(base_url = NULL)}}{Create a new client. Optionally specify a custom base URL.
@@ -246,4 +252,5 @@
 #' }
 #'
 #' @name MyHospitalsClient
+#' @export MyHospitalsClient
 NULL

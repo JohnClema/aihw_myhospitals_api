@@ -64,6 +64,57 @@ fn block_on<F: std::future::Future>(future: F) -> F::Output {
     rt.block_on(future)
 }
 
+/// Longest error message returned to R, in characters.
+const MAX_ERROR_CHARS: usize = 2000;
+
+/// A `fmt::Write` sink that keeps at most `MAX_ERROR_CHARS` characters and
+/// drops NUL bytes, which R strings cannot hold.
+#[derive(Default)]
+struct BoundedMessage {
+    text: String,
+    chars: usize,
+    truncated: bool,
+}
+
+impl std::fmt::Write for BoundedMessage {
+    fn write_str(&mut self, s: &str) -> std::fmt::Result {
+        for c in s.chars().filter(|&c| c != '\0') {
+            if self.chars == MAX_ERROR_CHARS {
+                self.truncated = true;
+                // Stop formatting early: error payloads can be megabytes.
+                return Err(std::fmt::Error);
+            }
+            self.text.push(c);
+            self.chars += 1;
+        }
+        Ok(())
+    }
+}
+
+/// Convert a failed API call into an R condition of class `myhospitals_error`.
+///
+/// The condition is returned, and the R method raises it with `stop()` (see
+/// `R/zzz.R`). Raising it from here instead would longjmp over Rust frames,
+/// skipping destructors (leaking the error and the client), and
+/// `throw_r_error` passes its message to `Rf_error` as a printf format, so a
+/// `%` in a URL or response body could crash R.
+fn api_error(err: impl std::fmt::Display) -> Robj {
+    use std::fmt::Write;
+
+    let mut message = BoundedMessage::default();
+    // An Err here only means the message was cut short.
+    let _ = write!(message, "API error: {err}");
+    drop(err);
+    if message.truncated {
+        message.text.push_str(" [truncated]");
+    }
+
+    let mut condition = list!(message = message.text, call = ());
+    // Setting a class on a freshly created list cannot fail.
+    let _ = condition.set_class(["myhospitals_error", "error", "condition"]);
+    condition.into()
+}
+
 /// R client for the MyHospitals Data API.
 ///
 /// This client provides methods to access Australian hospital data
@@ -84,7 +135,7 @@ impl MyHospitalsClient {
     /// Create a new MyHospitals API client
     /// @param base_url Optional custom base URL for the API
     /// @return A client object to use with other methods
-    fn new(base_url: Option<String>) -> Self {
+    fn new(#[default = "NULL"] base_url: Option<String>) -> Self {
         let url = base_url.as_deref().unwrap_or(DEFAULT_BASE_URL);
         MyHospitalsClient {
             inner: Arc::new(Client::new(url)),
@@ -101,9 +152,7 @@ impl MyHospitalsClient {
         let result = block_on(self.inner.get_caveats().send());
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -119,9 +168,7 @@ impl MyHospitalsClient {
         );
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -135,9 +182,7 @@ impl MyHospitalsClient {
         let result = block_on(self.inner.get_suppressions().send());
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -153,9 +198,7 @@ impl MyHospitalsClient {
         );
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -167,7 +210,7 @@ impl MyHospitalsClient {
     /// @param measure_code Optional vector of measure codes to filter by
     /// @param reported_measure_code Optional vector of reported measure codes to filter by
     /// @return List containing datasets
-    fn get_datasets(&self, measure_code: Nullable<Vec<String>>, reported_measure_code: Nullable<Vec<String>>) -> Robj {
+    fn get_datasets(&self, #[default = "NULL"] measure_code: Nullable<Vec<String>>, #[default = "NULL"] reported_measure_code: Nullable<Vec<String>>) -> Robj {
         let result = block_on(async {
             let mut builder = self.inner.get_datasets();
             if let NotNull(codes) = measure_code {
@@ -180,9 +223,7 @@ impl MyHospitalsClient {
         });
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -198,9 +239,7 @@ impl MyHospitalsClient {
         );
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -216,9 +255,7 @@ impl MyHospitalsClient {
         );
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -229,7 +266,7 @@ impl MyHospitalsClient {
     /// Get all measures
     /// @param measure_category_code Optional vector of measure category codes to filter by
     /// @return List containing measures
-    fn get_measures(&self, measure_category_code: Nullable<Vec<String>>) -> Robj {
+    fn get_measures(&self, #[default = "NULL"] measure_category_code: Nullable<Vec<String>>) -> Robj {
         let result = block_on(async {
             let mut builder = self.inner.get_measures();
             if let NotNull(codes) = measure_category_code {
@@ -239,9 +276,7 @@ impl MyHospitalsClient {
         });
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -257,9 +292,7 @@ impl MyHospitalsClient {
         );
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -275,9 +308,7 @@ impl MyHospitalsClient {
         );
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -293,9 +324,7 @@ impl MyHospitalsClient {
         );
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -309,9 +338,7 @@ impl MyHospitalsClient {
         let result = block_on(self.inner.get_measure_categories().send());
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -327,9 +354,7 @@ impl MyHospitalsClient {
         );
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -345,9 +370,7 @@ impl MyHospitalsClient {
         );
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -358,7 +381,7 @@ impl MyHospitalsClient {
     /// Get all reported measures
     /// @param reported_measure_category_code Optional vector of reported measure category codes to filter by
     /// @return List containing reported measures
-    fn get_reported_measures(&self, reported_measure_category_code: Nullable<Vec<String>>) -> Robj {
+    fn get_reported_measures(&self, #[default = "NULL"] reported_measure_category_code: Nullable<Vec<String>>) -> Robj {
         let result = block_on(async {
             let mut builder = self.inner.get_reported_measures();
             if let NotNull(codes) = reported_measure_category_code {
@@ -368,9 +391,7 @@ impl MyHospitalsClient {
         });
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -386,9 +407,7 @@ impl MyHospitalsClient {
         );
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -404,9 +423,7 @@ impl MyHospitalsClient {
         );
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -420,9 +437,7 @@ impl MyHospitalsClient {
         let result = block_on(self.inner.get_reported_measure_categories().send());
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -438,9 +453,7 @@ impl MyHospitalsClient {
         );
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -456,9 +469,7 @@ impl MyHospitalsClient {
         );
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -469,7 +480,7 @@ impl MyHospitalsClient {
     /// Get all reporting units
     /// @param reporting_unit_type_code Optional vector of reporting unit type codes to filter by
     /// @return List containing reporting units
-    fn get_reporting_units(&self, reporting_unit_type_code: Nullable<Vec<String>>) -> Robj {
+    fn get_reporting_units(&self, #[default = "NULL"] reporting_unit_type_code: Nullable<Vec<String>>) -> Robj {
         let result = block_on(async {
             let mut builder = self.inner.get_reporting_units();
             if let NotNull(codes) = reporting_unit_type_code {
@@ -479,9 +490,7 @@ impl MyHospitalsClient {
         });
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -497,9 +506,7 @@ impl MyHospitalsClient {
         );
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -515,9 +522,7 @@ impl MyHospitalsClient {
         );
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -533,9 +538,7 @@ impl MyHospitalsClient {
         );
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -551,9 +554,7 @@ impl MyHospitalsClient {
         );
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -567,9 +568,7 @@ impl MyHospitalsClient {
         let result = block_on(self.inner.get_reporting_unit_types().send());
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -585,9 +584,7 @@ impl MyHospitalsClient {
         );
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -603,9 +600,7 @@ impl MyHospitalsClient {
         );
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -629,13 +624,13 @@ impl MyHospitalsClient {
     fn get_flat_data_extract(
         &self,
         measure_category_code: &str,
-        skip: i32,
-        top: u32,
-        reporting_unit_type_code: Nullable<Vec<String>>,
-        measure_code: Nullable<Vec<String>>,
-        reporting_unit_code: Nullable<Vec<String>>,
-        start_date: Nullable<String>,
-        end_date: Nullable<String>,
+        #[default = "0L"] skip: i32,
+        #[default = "100L"] top: u32,
+        #[default = "NULL"] reporting_unit_type_code: Nullable<Vec<String>>,
+        #[default = "NULL"] measure_code: Nullable<Vec<String>>,
+        #[default = "NULL"] reporting_unit_code: Nullable<Vec<String>>,
+        #[default = "NULL"] start_date: Nullable<String>,
+        #[default = "NULL"] end_date: Nullable<String>,
     ) -> Robj {
         let result = block_on(async {
             let top_nonzero = std::num::NonZeroU32::new(top.max(1))
@@ -667,9 +662,7 @@ impl MyHospitalsClient {
         });
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -689,13 +682,13 @@ impl MyHospitalsClient {
     fn get_flat_formatted_data_extract(
         &self,
         measure_category_code: &str,
-        skip: i32,
-        top: u32,
-        reporting_unit_type_code: Nullable<Vec<String>>,
-        measure_code: Nullable<Vec<String>>,
-        reporting_unit_code: Nullable<Vec<String>>,
-        start_date: Nullable<String>,
-        end_date: Nullable<String>,
+        #[default = "0L"] skip: i32,
+        #[default = "100L"] top: u32,
+        #[default = "NULL"] reporting_unit_type_code: Nullable<Vec<String>>,
+        #[default = "NULL"] measure_code: Nullable<Vec<String>>,
+        #[default = "NULL"] reporting_unit_code: Nullable<Vec<String>>,
+        #[default = "NULL"] start_date: Nullable<String>,
+        #[default = "NULL"] end_date: Nullable<String>,
     ) -> Robj {
         let result = block_on(async {
             let top_nonzero = std::num::NonZeroU32::new(top.max(1))
@@ -727,9 +720,7 @@ impl MyHospitalsClient {
         });
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -743,9 +734,7 @@ impl MyHospitalsClient {
         let result = block_on(self.inner.get_simple_downloads_download_codes().send());
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -770,9 +759,7 @@ impl MyHospitalsClient {
         });
         match result {
             Ok(bytes) => Raw::from_bytes(&bytes).into_robj(),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -782,9 +769,7 @@ impl MyHospitalsClient {
         let result = block_on(self.inner.get_measure_downloads_measure_download_codes().send());
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -809,9 +794,7 @@ impl MyHospitalsClient {
         });
         match result {
             Ok(bytes) => Raw::from_bytes(&bytes).into_robj(),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -836,9 +819,7 @@ impl MyHospitalsClient {
         });
         match result {
             Ok(bytes) => Raw::from_bytes(&bytes).into_robj(),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -848,9 +829,7 @@ impl MyHospitalsClient {
         let result = block_on(self.inner.get_reporting_units_downloads_datasheet_codes().send());
         match result {
             Ok(response) => to_r_list(&response.into_inner()),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 
@@ -877,9 +856,7 @@ impl MyHospitalsClient {
         });
         match result {
             Ok(bytes) => Raw::from_bytes(&bytes).into_robj(),
-            Err(e) => {
-                throw_r_error(format!("API error: {}", e));
-            }
+            Err(e) => api_error(e),
         }
     }
 }

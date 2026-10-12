@@ -11,6 +11,14 @@ client object using the \code{$} operator.
 \details{
 R6-style client for the AIHW MyHospitals Data API.
 }
+\section{Errors}{
+
+A failed call (network failure, HTTP error status or unexpected response)
+raises an R error of class \code{myhospitals_error}, which you can catch with
+\code{tryCatch(..., myhospitals_error = function(e) ...)}. Messages longer than
+2,000 characters are truncated.
+}
+
 \section{Methods}{
 
 \describe{
