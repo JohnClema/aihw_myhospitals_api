@@ -29,8 +29,13 @@
 #' @section Errors:
 #' A failed call (network failure, HTTP error status or unexpected response)
 #' raises an R error of class `myhospitals_error`, which you can catch with
-#' `tryCatch(..., myhospitals_error = function(e) ...)`. Messages longer than
-#' 2,000 characters are truncated.
+#' `tryCatch(..., myhospitals_error = function(e) ...)`. The message starts with
+#' the cause; messages longer than 2,000 characters are truncated.
+#'
+#' A client can't be saved and restored (with `saveRDS()` or in a saved
+#' workspace) or copied to another R process: calling a method on such a copy
+#' raises a `myhospitals_error`. Create a new client with
+#' `MyHospitalsClient$new()` instead.
 #'
 #' @section Methods:
 #' \describe{

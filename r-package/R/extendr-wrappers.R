@@ -10,6 +10,15 @@
 #' @useDynLib aihwmyhospitals, .registration = TRUE
 NULL
 
+#' Whether `client` still points at a Rust client.
+#'
+#' A client restored from disk (`saveRDS()`, a saved workspace) or copied to
+#' another R process holds a NULL pointer. The R methods check this before
+#' calling into Rust (see `R/zzz.R`), because extendr would otherwise raise
+#' its own error from inside Rust, leaking the call's arguments.
+#' @noRd
+client_is_live <- function(client) .Call(wrap__client_is_live, client)
+
 MyHospitalsClient <- new.env(parent = emptyenv())
 
 MyHospitalsClient$new <- function(base_url = NULL) .Call(wrap__MyHospitalsClient__new, base_url)

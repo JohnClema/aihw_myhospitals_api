@@ -1,5 +1,6 @@
 # Tests for aihwmyhospitals client
-# These tests require network access to the AIHW MyHospitals API
+# The integration tests at the end need network access to the AIHW MyHospitals
+# API; the rest run offline.
 
 test_that("MyHospitalsClient is exported", {
   expect_true("MyHospitalsClient" %in% getNamespaceExports("aihwmyhospitals"))
@@ -39,6 +40,18 @@ test_that("optional arguments have the documented defaults", {
       expect_true(has_null_default(f, arg), info = paste(method, arg))
     }
   }
+})
+
+test_that("methods can be called with their optional arguments omitted", {
+  # These calls fail offline, but only once they reach the request, so the
+  # Rust layer accepted the defaults.
+  client <- unreachable_client()
+  expect_error(client$get_datasets(), class = "myhospitals_error")
+  expect_error(client$get_measures(), class = "myhospitals_error")
+  expect_error(client$get_reported_measures(), class = "myhospitals_error")
+  expect_error(client$get_reporting_units(), class = "myhospitals_error")
+  expect_error(client$get_flat_data_extract("CAT"), class = "myhospitals_error")
+  expect_error(client$get_flat_formatted_data_extract("CAT"), class = "myhospitals_error")
 })
 
 test_that("client can be created with custom URL", {
